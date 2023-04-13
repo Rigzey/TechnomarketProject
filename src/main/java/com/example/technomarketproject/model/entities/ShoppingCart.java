@@ -8,8 +8,7 @@ import jakarta.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "shopping_cart")
+@Entity(name = "shopping_cart")
 public class ShoppingCart {
 
     @Id

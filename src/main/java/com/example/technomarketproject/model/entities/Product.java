@@ -3,8 +3,7 @@ package com.example.technomarketproject.model.entities;
 import lombok.*;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "products")
+@Entity(name = "products")
 @Getter
 @Setter
 @NoArgsConstructor
