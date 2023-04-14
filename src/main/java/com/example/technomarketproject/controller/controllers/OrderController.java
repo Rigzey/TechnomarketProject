@@ -29,7 +29,7 @@ public class OrderController extends GeneralController{
         int userId = findSessionLoggedId(s);
         return orderService.showSpecific(orderId, userId);
     }
-    @GetMapping("/orders/user/{userId)")
+    @GetMapping("/orders/user/{userId}")
     public List<Order> showUserOrders(@PathVariable int userId, HttpSession s){
         int sessionLoggedId = findSessionLoggedId(s);
         return orderService.showUserOrders(userId, sessionLoggedId);

@@ -1,6 +1,7 @@
 package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.controller.services.UserService;
+import com.example.technomarketproject.model.DTOs.UserLoginDTO;
 import com.example.technomarketproject.model.DTOs.UserRegisterDTO;
 import com.example.technomarketproject.model.DTOs.UserWithoutPasswordDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,10 @@ public class UserController {
     @PostMapping("/users/register")
     public UserWithoutPasswordDTO register(@RequestBody UserRegisterDTO dto) {
         return userService.register(dto);
+    }
+
+    @PostMapping("/users/login")
+    public UserWithoutPasswordDTO login(@RequestBody UserLoginDTO dto){
+        return userService.login(dto);
     }
 }

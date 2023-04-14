@@ -30,17 +30,7 @@ public class OrderService extends AbstractService{
         if(dto.getTotalPrice() < 0){
             throw new BadRequestException("Total price cannot be negative!");
         }
-        Order order = new Order();
-        for(Integer i : dto.getProducts()){
-            Optional<Product> optProduct = productRepository.findById(i);
-            if(optProduct.isEmpty()){
-                throw new FileNotFoundException("Product with id " + i + " not found!");
-            }
-            order.getProducts().add(optProduct.get());
-        }
-        order.setDeliveryAddress(dto.getDeliveryAddress());
-        order.setOrderDate(dto.getOrderDate());
-        order.setTotalPrice(dto.getTotalPrice());
+        Order order = mapper.map(dto, Order.class);
         order.setUser(opt.get());
         orderRepository.save(order);
         return order;

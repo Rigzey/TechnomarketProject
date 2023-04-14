@@ -1,6 +1,5 @@
 package com.example.technomarketproject.model.DTOs;
 
-import com.example.technomarketproject.model.entities.Product;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,5 +12,5 @@ public class AddOrderDTO {
     private LocalDate orderDate;
     private String deliveryAddress;
     private double totalPrice;
-    private List<Integer> products;
+    private List<ProductWithIdOnlyDTO> products;
 }
