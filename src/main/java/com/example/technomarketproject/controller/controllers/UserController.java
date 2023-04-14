@@ -40,8 +40,13 @@ public class UserController extends GeneralController {
     }
 
     @PutMapping("/users/{userId}")
-    public UserWithoutPasswordDTO updateUser(@PathVariable int userId, HttpSession s, UserWithoutPasswordDTO dto) {
+    public UserWithoutPasswordDTO updateUser(@PathVariable int userId, HttpSession s, @RequestBody UserWithoutPasswordDTO dto) {
         int loggedId = findSessionLoggedId(s);
         return userService.updateUser(userId, loggedId, dto);
+    }
+
+    @GetMapping("users/{userId}")
+    public UserWithoutPasswordDTO viewProfile(@PathVariable int userId) {
+        return userService.viewProfile(userId);
     }
 }

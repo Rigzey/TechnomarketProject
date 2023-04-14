@@ -88,6 +88,9 @@ public class UserService extends AbstractService {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
         }
+        if (userId != loggedId) {
+            throw new UnauthorizedException("Unauthorized profile update attempt.");
+        }
         User u = userRepository.findById(userId).get();
         u.setEmail(dto.getEmail());
         u.setGender(dto.getGender());
@@ -97,6 +100,14 @@ public class UserService extends AbstractService {
         u.setPhoneNumber(dto.getPhoneNumber());
         u.setAddress(dto.getAddress());
         userRepository.save(u);
+        return mapper.map(u, UserWithoutPasswordDTO.class);
+    }
+
+    public UserWithoutPasswordDTO viewProfile(int userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new FileNotFoundException("No such user.");
+        }
+        User u = userRepository.findById(userId).get();
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
 }
