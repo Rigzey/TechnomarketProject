@@ -14,10 +14,6 @@ import java.util.Optional;
 
 @Service
 public class CategoryService extends AbstractService {
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ModelMapper mapper;
 
     public Category addCategory(NewCategoryDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
