@@ -1,6 +1,6 @@
 package com.example.technomarketproject.controller.services;
 
-import com.example.technomarketproject.model.DTOs.NewSubcategoryDTO;
+import com.example.technomarketproject.model.DTOs.AddSubcategoryDTO;
 import com.example.technomarketproject.model.entities.Category;
 import com.example.technomarketproject.model.entities.Subcategory;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class SubcategoryService extends AbstractService{
-    public Subcategory addSubcategory(NewSubcategoryDTO dto, int userId) {
+    public Subcategory addSubcategory(AddSubcategoryDTO dto, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
         }

@@ -1,8 +1,10 @@
 package com.example.technomarketproject.model.entities;
 
+import com.example.technomarketproject.model.DTOs.CharacteristicsWithValuesDTO;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Entity(name = "products")
@@ -15,6 +17,9 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "subcategory_id")
@@ -30,7 +35,10 @@ public class Product {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany
+    @JoinTable(name = "product_characteristics",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "characteristic_id"))
     private List<Characteristic> characteristics;
 
     @OneToMany(mappedBy = "product")
