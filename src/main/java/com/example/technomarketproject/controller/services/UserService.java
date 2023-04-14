@@ -83,4 +83,20 @@ public class UserService extends AbstractService {
         }
         userRepository.findById(userId).get().setDeleted(true);
     }
+
+    public UserWithoutPasswordDTO updateUser(int userId, int loggedId, UserWithoutPasswordDTO dto) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new FileNotFoundException("No such user.");
+        }
+        User u = userRepository.findById(userId).get();
+        u.setEmail(dto.getEmail());
+        u.setGender(dto.getGender());
+        u.setFirstName(dto.getFirstName());
+        u.setLastName(dto.getLastName());
+        u.setDateOfBirth(dto.getDateOfBirth());
+        u.setPhoneNumber(dto.getPhoneNumber());
+        u.setAddress(dto.getAddress());
+        userRepository.save(u);
+        return mapper.map(u, UserWithoutPasswordDTO.class);
+    }
 }
