@@ -1,7 +1,7 @@
 package com.example.technomarketproject;
 
 import com.example.technomarketproject.model.exceptions.BadRequestException;
-import com.example.technomarketproject.model.exceptions.NotFoundException;
+import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,9 +23,9 @@ public class GlobalHandler {
         return e.getMessage();
     }
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(FileNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFoundException(NotFoundException e) {
+    public String handleNotFoundException(FileNotFoundException e) {
         return e.getMessage();
     }
 

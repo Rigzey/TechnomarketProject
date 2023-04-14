@@ -5,10 +5,9 @@ import com.example.technomarketproject.model.DTOs.NewCategoryDTO;
 import com.example.technomarketproject.model.entities.Category;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class CategoryController extends GeneralController{
@@ -22,8 +21,18 @@ public class CategoryController extends GeneralController{
     }
 
     @DeleteMapping("/categories/{categoryId}")
-    public void deleteCategory(@PathVariable int categoryId, HttpSession s){
+    public void deleteCategory(HttpSession s, @PathVariable int categoryId){
         int userId = findSessionLoggedId(s);
         categoryService.removeCategory(categoryId, userId);
+    }
+
+    @GetMapping("/categories/{categoryId}")
+    public Category showSpecificCategory(@PathVariable int categoryId){
+        return categoryService.showCategory(categoryId);
+    }
+
+    @GetMapping("/categories")
+    public List<Category> showAllCategories(){
+        return categoryService.showAll();
     }
 }
