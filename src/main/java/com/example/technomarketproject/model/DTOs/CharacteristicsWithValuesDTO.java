@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NewCategoryDTO {
-    private String name;
+public class CharacteristicsWithValuesDTO {
+    private int id;
+    private double value;
 }

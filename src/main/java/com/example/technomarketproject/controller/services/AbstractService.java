@@ -19,8 +19,6 @@ public abstract class AbstractService {
     protected ModelMapper mapper;
     @Autowired
     protected CategoryRepository categoryRepository;
-    @Autowired
-    protected ModelMapper mapper;
 
     protected User findUserById(int id){
         User u = userRepository.findById(id).orElseThrow(() -> new FileNotFoundException("User with id " + id + " not found!"));
