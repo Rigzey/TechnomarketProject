@@ -2,6 +2,7 @@ package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.controller.services.CategoryService;
 import com.example.technomarketproject.model.DTOs.AddCategoryDTO;
+import com.example.technomarketproject.model.DTOs.CategoryWithNameIdOnlyDTO;
 import com.example.technomarketproject.model.entities.Category;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class CategoryController extends GeneralController{
     private CategoryService categoryService;
 
     @PostMapping("/categories")
-    public Category addCategory(AddCategoryDTO dto, HttpSession s){
+    public Category addCategory(@RequestBody AddCategoryDTO dto, HttpSession s){
         int id = findSessionLoggedId(s);
         return categoryService.addCategory(dto, id);
     }

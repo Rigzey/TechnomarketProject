@@ -1,5 +1,6 @@
 package com.example.technomarketproject.controller.services;
 
+import com.example.technomarketproject.model.DTOs.ChangePasswordDTO;
 import com.example.technomarketproject.model.DTOs.UserLoginDTO;
 import com.example.technomarketproject.model.DTOs.UserRegisterDTO;
 import com.example.technomarketproject.model.DTOs.UserWithoutPasswordDTO;
@@ -48,6 +49,25 @@ public class UserService extends AbstractService {
         return mapper.map(user.get(), UserWithoutPasswordDTO.class);
     }
 
-    public UserWithoutPasswordDTO changePassword(int userId, int loggedId) {
+    public UserWithoutPasswordDTO changePassword(int userId, int loggedId, ChangePasswordDTO dto) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new FileNotFoundException("No such user.");
+        }
+        if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
+            throw new UnauthorizedException("Only admins can change other people's passwords.");
+        }
+        if (dto.getOldPassword().equals(dto.getNewPassword())) {
+            throw new BadRequestException("New password and old password must be different!");
+        }
+        if(!dto.getNewPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")){
+            throw new BadRequestException("Weak password! Please choose another one.");
+        }
+        if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
+            throw new BadRequestException("Password mismatch!");
+        }
+        User u = userRepository.findById(userId).get();
+        u.setPassword(dto.getNewPassword());
+        userRepository.save(u);
+        return mapper.map(u, UserWithoutPasswordDTO.class);
     }
 }
