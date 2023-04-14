@@ -35,4 +35,10 @@ public class UserController extends GeneralController {
         int loggedId = findSessionLoggedId(s);
         return userService.changePassword(userId, loggedId, dto);
     }
+
+    @PostMapping("users/{userId}")
+    public void deleteUser(@PathVariable int userId, HttpSession s, @RequestBody String password) {
+        int loggedId = findSessionLoggedId(s);
+        userService.deleteUser(userId, loggedId, password);
+    }
 }

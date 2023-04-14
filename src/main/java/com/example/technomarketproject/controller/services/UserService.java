@@ -70,4 +70,17 @@ public class UserService extends AbstractService {
         userRepository.save(u);
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
+
+    public void deleteUser(int userId, int loggedId, String password) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new FileNotFoundException("No such user.");
+        }
+        if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
+            throw new UnauthorizedException("Only admins can delete other user's accounts.");
+        }
+        if (!userRepository.findById(userId).get().getPassword().equals(password)) {
+            throw new UnauthorizedException("Incorrect password!");
+        }
+        userRepository.findById(userId).get().setDeleted(true);
+    }
 }
