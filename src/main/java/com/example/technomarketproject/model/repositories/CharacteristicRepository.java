@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CharacteristicRepository extends JpaRepository<Characteristic, Integer> {
+    boolean existsByName(String name);
 }
