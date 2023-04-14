@@ -59,4 +59,19 @@ public class ProductService extends AbstractService{
         productRepository.save(p);
         return p;
     }
+
+    public void removeProduct(int productId, int userId) {
+        if(!findUserById(userId).isAdmin()){
+            throw new UnauthorizedException("User must be admin!");
+        }
+        productRepository.deleteById(productId);
+    }
+
+    public Product showSpecificProduct(int productId) {
+        Optional<Product> opt = productRepository.findById(productId);
+        if(opt.isEmpty()){
+            throw new FileNotFoundException("Product with id " + productId + " not found!");
+        }
+        return opt.get();
+    }
 }

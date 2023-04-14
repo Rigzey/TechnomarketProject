@@ -5,9 +5,7 @@ import com.example.technomarketproject.model.DTOs.AddProductDTO;
 import com.example.technomarketproject.model.entities.Product;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController extends GeneralController {
@@ -18,5 +16,16 @@ public class ProductController extends GeneralController {
     public Product add(@RequestBody AddProductDTO dto, HttpSession s){
         int id = findSessionLoggedId(s);
         return productService.addProduct(dto, id);
+    }
+
+    @DeleteMapping("/products/{productId}")
+    public void delete(@PathVariable int productId, HttpSession s){
+        int userId = findSessionLoggedId(s);
+        productService.removeProduct(productId, userId);
+    }
+
+    @GetMapping("/products/{productId}")
+    public Product showSpecific(@PathVariable int productId){
+        return productService.showSpecificProduct(productId);
     }
 }
