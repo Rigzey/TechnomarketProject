@@ -4,6 +4,8 @@ import lombok.*;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity(name = "subcategories")
 @Getter
 @Setter
@@ -18,7 +20,10 @@ public class Subcategory {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "subcategory")
+    private List<Product> products;
 }

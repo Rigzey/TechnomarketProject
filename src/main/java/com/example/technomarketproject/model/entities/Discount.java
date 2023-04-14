@@ -4,6 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity(name = "discounts")
 @Getter
@@ -27,4 +28,8 @@ public class Discount {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
+    @OneToMany(mappedBy = "discount")
+    List<Product> products;
+
 }

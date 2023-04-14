@@ -3,6 +3,8 @@ package com.example.technomarketproject.model.entities;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity(name = "products")
 @Getter
 @Setter
@@ -14,7 +16,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "subcategory_id")
     private Subcategory subcategory;
 
@@ -24,7 +26,13 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "discount_id")
     private Discount discount;
+
+    @ManyToMany(mappedBy = "products")
+    private List<Characteristic> characteristics;
+
+    @OneToMany(mappedBy = "product")
+    private List<ShoppingCart> shoppingCarts;
 }

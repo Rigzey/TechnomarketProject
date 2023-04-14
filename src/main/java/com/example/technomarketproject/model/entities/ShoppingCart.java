@@ -3,6 +3,8 @@ package com.example.technomarketproject.model.entities;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Data
 @Getter
 @Setter
@@ -23,7 +25,7 @@ public class ShoppingCart {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "quantity")
+    @Column
     private int quantity;
 
 }
