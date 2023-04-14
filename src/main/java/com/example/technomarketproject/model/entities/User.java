@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -48,4 +49,6 @@ public class User {
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 }
