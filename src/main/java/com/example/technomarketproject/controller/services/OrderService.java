@@ -5,6 +5,7 @@ import com.example.technomarketproject.model.entities.Order;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
+import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,20 @@ public class OrderService extends AbstractService{
         order.setUser(opt.get());
         orderRepository.save(order);
         return order;
+    }
+
+    public void removeOrder(int orderId, int userId) {
+        Optional<User> optUser = userRepository.findById(userId);
+        Optional<Order> optOrder = orderRepository.findById(orderId);
+        if(optUser.isEmpty()){
+            throw new FileNotFoundException("No user with id " + userId + " found!");
+        }
+        if(optOrder.isEmpty()){
+            throw new FileNotFoundException("No order with id " + orderId + " found!");
+        }
+        if(!optUser.get().isAdmin() && optUser.get() != optOrder.get().getUser()){
+            throw new UnauthorizedException("Only admins can remove other people orders!");
+        }
+        orderRepository.deleteById(orderId);
     }
 }
