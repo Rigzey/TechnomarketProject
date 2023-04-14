@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class OrderController extends GeneralController{
     @Autowired
@@ -20,5 +22,16 @@ public class OrderController extends GeneralController{
     public void remove(@PathVariable int orderId, HttpSession s){
         int userId = findSessionLoggedId(s);
         orderService.removeOrder(orderId, userId);
+    }
+
+    @GetMapping("/orders/{orderId}")
+    public Order showSpecific(@PathVariable int orderId, HttpSession s){
+        int userId = findSessionLoggedId(s);
+        return orderService.showSpecific(orderId, userId);
+    }
+    @GetMapping("/orders/user/{userId)")
+    public List<Order> showUserOrders(@PathVariable int userId, HttpSession s){
+        int sessionLoggedId = findSessionLoggedId(s);
+        return orderService.showUserOrders(userId, sessionLoggedId);
     }
 }

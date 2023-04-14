@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,4 +30,10 @@ public class Order {
     @Column(nullable = false)
     private String deliveryAddress;
 
+    @ManyToMany
+    @JoinTable(
+            name = "orders_have_products",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> products;
 }

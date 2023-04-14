@@ -40,4 +40,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductCharacteristic> values;
+
+    @ManyToMany(mappedBy = "products")
+    private List<Order> orders;
 }

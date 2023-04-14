@@ -18,8 +18,6 @@ import java.util.Optional;
 
 @Service
 public class ProductService extends AbstractService{
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private CharacteristicRepository characteristicRepository;

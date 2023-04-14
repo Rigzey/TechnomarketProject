@@ -13,5 +13,5 @@ public class AddOrderDTO {
     private LocalDate orderDate;
     private String deliveryAddress;
     private double totalPrice;
-    private List<Product> products;
+    private List<Integer> products;
 }
