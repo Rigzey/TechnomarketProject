@@ -4,13 +4,16 @@ import com.example.technomarketproject.controller.services.UserService;
 import com.example.technomarketproject.model.DTOs.UserLoginDTO;
 import com.example.technomarketproject.model.DTOs.UserRegisterDTO;
 import com.example.technomarketproject.model.DTOs.UserWithoutPasswordDTO;
+import com.example.technomarketproject.model.exceptions.UnauthorizedException;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
+public class UserController extends GeneralController {
 
     @Autowired
     private UserService userService;
@@ -23,5 +26,11 @@ public class UserController {
     @PostMapping("/users/login")
     public UserWithoutPasswordDTO login(@RequestBody UserLoginDTO dto){
         return userService.login(dto);
+    }
+
+    @PostMapping("/users/{userId}/change-password")
+    public UserWithoutPasswordDTO changePassword(@PathVariable int userId, HttpSession s) {
+        int loggedId = findSessionLoggedId(s);
+        return userService.changePassword(userId, loggedId);
     }
 }

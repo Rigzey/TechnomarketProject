@@ -47,4 +47,7 @@ public class UserService extends AbstractService {
         }
         return mapper.map(user.get(), UserWithoutPasswordDTO.class);
     }
+
+    public UserWithoutPasswordDTO changePassword(int userId, int loggedId) {
+    }
 }
