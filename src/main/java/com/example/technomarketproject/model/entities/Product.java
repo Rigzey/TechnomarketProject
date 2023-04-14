@@ -35,12 +35,9 @@ public class Product {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    @ManyToMany
-    @JoinTable(name = "product_characteristics",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "characteristic_id"))
-    private List<Characteristic> characteristics;
-
     @OneToMany(mappedBy = "product")
     private List<ShoppingCart> shoppingCarts;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductCharacteristic> values;
 }

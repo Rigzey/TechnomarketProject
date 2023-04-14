@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class CharacteristicsWithValuesDTO {
     private int id;
-    private double value;
+    private String value;
 }

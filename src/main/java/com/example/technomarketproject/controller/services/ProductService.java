@@ -4,6 +4,7 @@ import com.example.technomarketproject.model.DTOs.AddProductDTO;
 import com.example.technomarketproject.model.DTOs.CharacteristicsWithValuesDTO;
 import com.example.technomarketproject.model.entities.Characteristic;
 import com.example.technomarketproject.model.entities.Product;
+import com.example.technomarketproject.model.entities.ProductCharacteristic;
 import com.example.technomarketproject.model.entities.Subcategory;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -49,12 +50,14 @@ public class ProductService extends AbstractService{
         p.setDescription(dto.getDescription());
 
         for(CharacteristicsWithValuesDTO c : dto.getCharacteristics()){
-            int cId = c.getId();
-            Optional<Characteristic> optC = characteristicRepository.findById(cId);
-            if(optC.isEmpty()){
-                throw new FileNotFoundException("Characteristic with id " + cId + " was not found!");
+            Optional<Characteristic> opt = characteristicRepository.findById(c.getId());
+            if(opt.isEmpty()){
+                throw new BadRequestException("No characteristic with id " + c.getId() + " found!");
             }
-            p.getCharacteristics().add(optC.get());
+            ProductCharacteristic pc = new ProductCharacteristic();
+            pc.setProduct(p);
+            pc.setCharacteristic(opt.get());
+            pc.setValue(c.getValue());
         }
         productRepository.save(p);
         return p;

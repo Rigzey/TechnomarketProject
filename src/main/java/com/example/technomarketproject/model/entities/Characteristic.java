@@ -16,7 +16,7 @@ public class Characteristic {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "characteristics")
-    private List<Product> products;
+    @OneToMany(mappedBy = "characteristic")
+    private List<ProductCharacteristic> values;
 
 }
