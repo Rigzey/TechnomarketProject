@@ -25,4 +25,9 @@ public class ReviewController extends GeneralController {
         reviewService.deleteReview(reviewId, userId);
     }
 
+    @GetMapping("/reviews/{reviewId}")
+    public Review showReview(@PathVariable int reviewId) {
+        return reviewService.showReview(reviewId);
+    }
+
 }

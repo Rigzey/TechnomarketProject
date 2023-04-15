@@ -43,4 +43,12 @@ public class ReviewService extends AbstractService {
         }
         reviewRepository.deleteById(reviewId);
     }
+
+    public Review showReview(int reviewId) {
+        Optional<Review> optReview = reviewRepository.findById(reviewId);
+        if(optReview.isEmpty()){
+            throw new FileNotFoundException("Review with id " + reviewId + " not found!");
+        }
+        return optReview.get();
+    }
 }
