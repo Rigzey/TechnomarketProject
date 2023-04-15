@@ -10,6 +10,7 @@ import com.example.technomarketproject.model.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,5 +51,13 @@ public class ReviewService extends AbstractService {
             throw new FileNotFoundException("Review with id " + reviewId + " not found!");
         }
         return optReview.get();
+    }
+
+    public List<Review> showUserReviews(int userId) {
+        Optional<User> opt = userRepository.findById(userId);
+        if(opt.isEmpty()){
+            throw new FileNotFoundException("User with id " + userId + " not found!");
+        }
+        return opt.get().getReviews();
     }
 }

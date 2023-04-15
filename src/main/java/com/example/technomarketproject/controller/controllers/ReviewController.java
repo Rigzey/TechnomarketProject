@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ReviewController extends GeneralController {
 
@@ -28,6 +30,11 @@ public class ReviewController extends GeneralController {
     @GetMapping("/reviews/{reviewId}")
     public Review showReview(@PathVariable int reviewId) {
         return reviewService.showReview(reviewId);
+    }
+
+    @GetMapping("reviews/user/{userId}")
+    public List<Review> showUserReviews(@PathVariable int userId) {
+        return reviewService.showUserReviews(userId);
     }
 
 }
