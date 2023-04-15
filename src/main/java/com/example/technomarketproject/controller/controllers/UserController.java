@@ -1,13 +1,12 @@
 package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.controller.services.UserService;
-import com.example.technomarketproject.model.DTOs.ChangePasswordDTO;
-import com.example.technomarketproject.model.DTOs.UserLoginDTO;
-import com.example.technomarketproject.model.DTOs.UserRegisterDTO;
-import com.example.technomarketproject.model.DTOs.UserWithoutPasswordDTO;
+import com.example.technomarketproject.model.DTOs.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserController extends GeneralController {
@@ -48,5 +47,11 @@ public class UserController extends GeneralController {
     @GetMapping("/users/{userId}")
     public UserWithoutPasswordDTO viewProfile(@PathVariable int userId) {
         return userService.viewProfile(userId);
+    }
+
+    @GetMapping("/users/{userId}/history")
+    public List<ProductWithIdOnlyDTO> viewSearchHistory(@PathVariable int userId, HttpSession s) {
+        int loggedId = findSessionLoggedId(s);
+        return userService.viewSearchHistory(userId, loggedId);
     }
 }
