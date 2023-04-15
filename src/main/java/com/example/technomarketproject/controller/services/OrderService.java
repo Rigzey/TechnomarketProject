@@ -3,7 +3,6 @@ package com.example.technomarketproject.controller.services;
 import com.example.technomarketproject.model.DTOs.AddOrderDTO;
 import com.example.technomarketproject.model.DTOs.ProductWithIdOnlyDTO;
 import com.example.technomarketproject.model.DTOs.SimpleOrderDTO;
-import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.entities.Order;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.User;

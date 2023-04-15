@@ -26,6 +26,9 @@ public class ReviewService extends AbstractService {
         if(opt.isEmpty()){
             throw new FileNotFoundException("User with id " + id + " not found!");
         }
+        if(!productRepository.existsById(dto.getProductId().getId())){
+            throw new FileNotFoundException("Product with this id not found!");
+        }
         if (dto.getRating() < 1 || dto.getRating() > 10) {
             throw new BadRequestException("Product rating should be between 1 and 10.");
         }

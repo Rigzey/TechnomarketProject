@@ -1,6 +1,9 @@
 package com.example.technomarketproject.controller.services;
 
-import com.example.technomarketproject.model.DTOs.*;
+import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
+import com.example.technomarketproject.model.DTOs.RemoveFromCartDTO;
+import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
+import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ShoppingCart;
 import com.example.technomarketproject.model.entities.User;

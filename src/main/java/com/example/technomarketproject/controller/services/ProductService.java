@@ -67,6 +67,9 @@ public class ProductService extends AbstractService{
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
         }
+        if(!productRepository.existsById(productId)){
+            throw new FileNotFoundException("Product with this id not found!");
+        }
         productRepository.deleteById(productId);
     }
 

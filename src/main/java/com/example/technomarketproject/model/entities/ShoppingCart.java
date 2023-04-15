@@ -3,8 +3,6 @@ package com.example.technomarketproject.model.entities;
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Data
 @Getter
 @Setter

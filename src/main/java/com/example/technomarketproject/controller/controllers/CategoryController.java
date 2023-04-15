@@ -3,7 +3,6 @@ package com.example.technomarketproject.controller.controllers;
 import com.example.technomarketproject.controller.services.CategoryService;
 import com.example.technomarketproject.model.DTOs.AddCategoryDTO;
 import com.example.technomarketproject.model.DTOs.SimpleCategoryDTO;
-import com.example.technomarketproject.model.entities.Category;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

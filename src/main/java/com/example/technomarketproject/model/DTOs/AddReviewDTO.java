@@ -1,6 +1,5 @@
 package com.example.technomarketproject.model.DTOs;
 
-import com.example.technomarketproject.model.entities.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
