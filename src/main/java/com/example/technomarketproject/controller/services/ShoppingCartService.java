@@ -1,6 +1,7 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
+import com.example.technomarketproject.model.DTOs.RemoveFromCartDTO;
 import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ShoppingCart;
@@ -37,7 +38,7 @@ public class ShoppingCartService extends AbstractService {
         return mapper.map(sc, SimpleShoppingCartDTO.class);
     }
 
-    public void deleteProduct(int userId, int productId, int quantity) {
+    public void deleteProduct(int userId, int productId, RemoveFromCartDTO dto) {
         Optional<User> optUser = userRepository.findById(userId);
         Optional<Product> optProduct = productRepository.findById(productId);
         if(optUser.isEmpty()){
@@ -46,14 +47,14 @@ public class ShoppingCartService extends AbstractService {
         if(optProduct.isEmpty()){
             throw new FileNotFoundException("Product with id " + productId + " not found!");
         }
-        Optional<ShoppingCart> opt = shoppingCartRepository.findShoppingCartByUserAndProductId(optUser.get(), optProduct.get());
+        Optional<ShoppingCart> opt = shoppingCartRepository.findShoppingCartByUserAndProduct(optUser.get(), optProduct.get());
         if(opt.isEmpty()){
             throw new FileNotFoundException("Shopping cart does not exist!");
         }
-        if(opt.get().getQuantity() < quantity){
+        if(opt.get().getQuantity() < dto.getQuantity()){
             throw new BadRequestException("The quantity of a product cannot be negative!");
         }
-        opt.get().setQuantity(opt.get().getQuantity() - quantity);
+        opt.get().setQuantity(opt.get().getQuantity() - dto.getQuantity());
         if(opt.get().getQuantity() == 0){
             shoppingCartRepository.delete(opt.get());
         }

@@ -2,6 +2,7 @@ package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.controller.services.ShoppingCartService;
 import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
+import com.example.technomarketproject.model.DTOs.RemoveFromCartDTO;
 import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
 import com.example.technomarketproject.model.entities.ShoppingCart;
 import jakarta.servlet.http.HttpSession;
@@ -20,13 +21,12 @@ public class ShoppingCartController extends GeneralController {
     @PostMapping("/cart")
     private SimpleShoppingCartDTO addProduct(@RequestBody AddToShoppingCartDTO dto, HttpSession s) {
         int id = findSessionLoggedId(s);
-        System.out.println(id);
         return shoppingCartService.addProduct(dto, id);
     }
 
     @PostMapping("/cart/{productId}")
-    private void deleteProduct(@PathVariable int productId, HttpSession s, @RequestBody int quantity) {
+    private void deleteProduct(@PathVariable int productId, HttpSession s, @RequestBody RemoveFromCartDTO dto) {
         int userId = findSessionLoggedId(s);
-        shoppingCartService.deleteProduct(userId, productId, quantity);
+        shoppingCartService.deleteProduct(userId, productId, dto);
     }
 }
