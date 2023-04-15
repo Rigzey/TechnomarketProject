@@ -5,11 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubcategoryWithNameIdDTO {
-    protected int id;
-    protected String name;
+public class AddDiscountDTO {
+    protected LocalDate dateTo;
+    protected LocalDate dateFrom;
+    protected int percentageOff;
+    protected ProductWithIdOnlyDTO product;
 }

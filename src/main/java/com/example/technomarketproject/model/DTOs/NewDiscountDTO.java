@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryWithNameIdOnlyDTO {
+public class NewDiscountDTO extends AddDiscountDTO{
     private int id;
-    private String name;
 }

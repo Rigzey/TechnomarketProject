@@ -28,8 +28,4 @@ public class Discount {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
-
-    @OneToMany(mappedBy = "discount")
-    List<Product> products;
-
 }

@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryWithNameIdDTO {
-    private int id;
-    private String name;
+    protected int id;
+    protected String name;
 }
