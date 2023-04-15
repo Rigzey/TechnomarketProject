@@ -20,6 +20,7 @@ public class CharacteristicService extends AbstractService{
         if(characteristicRepository.existsByName(dto.getName())){
             throw new BadRequestException("Characteristic with this name already exists!");
         }
+        characteristicRepository.save(mapper.map(dto, Characteristic.class));
         return mapper.map(dto, Characteristic.class);
     }
 

@@ -4,6 +4,7 @@ import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ShoppingCart;
 import com.example.technomarketproject.model.entities.User;
+import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.repositories.ShoppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,21 @@ public class ShoppingCartService extends AbstractService {
             throw new FileNotFoundException("User with id " + userId + " not found!");
         }
         if(optProduct.isEmpty()){
-            throw new FileNotFoundException("No such product in cart!");
+            throw new FileNotFoundException("Product with id " + productId + " not found!");
         }
-        // TODO
+        Optional<ShoppingCart> opt = shoppingCartRepository.findShoppingCartByUserAndProduct(optUser.get(), optProduct.get());
+        if(opt.isEmpty()){
+            throw new FileNotFoundException("Shopping cart does not exist!");
+        }
+        if(opt.get().getQuantity() < quantity){
+            throw new BadRequestException("The quantity of a product cannot be negative!");
+        }
+        opt.get().setQuantity(opt.get().getQuantity() - quantity);
+        if(opt.get().getQuantity() == 0){
+            shoppingCartRepository.delete(opt.get());
+        }
+        else{
+            shoppingCartRepository.save(opt.get());
+        }
     }
 }
