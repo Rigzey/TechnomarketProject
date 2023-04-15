@@ -11,8 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SimpleCategoryDTO {
-    private int id;
-    private String name;
-    private List<SimpleSubcategoryDTO> subcategories;
+public class SimpleCategoryDTO extends CategoryWithNameIdDTO {
+    private List<SubcategoryWithNameIdDTO> subcategories;
 }

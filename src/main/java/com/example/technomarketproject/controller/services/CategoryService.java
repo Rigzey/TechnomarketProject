@@ -42,7 +42,8 @@ public class CategoryService extends AbstractService {
         if (opt.isEmpty()) {
             throw new FileNotFoundException("Category with this id not found!");
         }
-        return mapper.map(opt.get(), SimpleCategoryDTO.class);
+        Category c = opt.get();
+        return mapper.map(c, SimpleCategoryDTO.class);
     }
 
     public List<SimpleCategoryDTO> showAll() {

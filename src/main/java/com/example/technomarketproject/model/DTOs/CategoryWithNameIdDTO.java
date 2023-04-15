@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SimpleSubcategoryDTO extends SubcategoryWithNameIdDTO {
-    private CategoryWithNameIdDTO category;
+public class CategoryWithNameIdDTO {
+    private int id;
+    private String name;
 }
