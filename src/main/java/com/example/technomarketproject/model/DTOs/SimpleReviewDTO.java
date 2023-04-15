@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddReviewDTO {
-    private ProductWithIdOnlyDTO productId;
+public class SimpleReviewDTO {
+    private int id;
     private String title;
     private String comment;
     private double rating;
+    private ProductWithIdOnlyDTO productId;
+    private UserWithoutPasswordDTO user;
 }

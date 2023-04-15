@@ -1,6 +1,7 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddReviewDTO;
+import com.example.technomarketproject.model.DTOs.SimpleReviewDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.Review;
 import com.example.technomarketproject.model.entities.User;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService extends AbstractService {
@@ -19,7 +21,7 @@ public class ReviewService extends AbstractService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    public Review addReview(AddReviewDTO dto, int id) {
+    public SimpleReviewDTO addReview(AddReviewDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
             throw new FileNotFoundException("User with id " + id + " not found!");
@@ -29,8 +31,10 @@ public class ReviewService extends AbstractService {
         }
         Review r = mapper.map(dto, Review.class);
         r.setUser(opt.get());
+        r.setProductId(mapper.map(dto.getProductId(), Product.class));
         reviewRepository.save(r);
-        return r;
+        SimpleReviewDTO sr = mapper.map(r, SimpleReviewDTO.class);
+        return sr;
     }
 
     public void deleteReview(int reviewId, int userId) {
@@ -45,27 +49,33 @@ public class ReviewService extends AbstractService {
         reviewRepository.deleteById(reviewId);
     }
 
-    public Review showReview(int reviewId) {
+    public SimpleReviewDTO showReview(int reviewId) {
         Optional<Review> optReview = reviewRepository.findById(reviewId);
         if(optReview.isEmpty()){
             throw new FileNotFoundException("Review with id " + reviewId + " not found!");
         }
-        return optReview.get();
+        return mapper.map(optReview.get(), SimpleReviewDTO.class);
     }
 
-    public List<Review> showUserReviews(int userId) {
+    public List<SimpleReviewDTO> showUserReviews(int userId) {
         Optional<User> opt = userRepository.findById(userId);
         if(opt.isEmpty()){
             throw new FileNotFoundException("User with id " + userId + " not found!");
         }
-        return opt.get().getReviews();
+        return opt.get().getReviews()
+                .stream()
+                .map(o -> mapper.map(o, SimpleReviewDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public List<Review> showProductReviews(int productId) {
+    public List<SimpleReviewDTO> showProductReviews(int productId) {
         Optional<Product> opt = productRepository.findById(productId);
         if(opt.isEmpty()){
             throw new FileNotFoundException("Product with id " + productId + " not found!");
         }
-        return opt.get().getReviews();
+        return opt.get().getReviews()
+                .stream()
+                .map(o -> mapper.map(o ,SimpleReviewDTO.class))
+                .collect(Collectors.toList());
     }
 }

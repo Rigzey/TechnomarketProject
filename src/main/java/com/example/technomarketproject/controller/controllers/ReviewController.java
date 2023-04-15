@@ -2,6 +2,7 @@ package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.controller.services.ReviewService;
 import com.example.technomarketproject.model.DTOs.AddReviewDTO;
+import com.example.technomarketproject.model.DTOs.SimpleReviewDTO;
 import com.example.technomarketproject.model.entities.Review;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class ReviewController extends GeneralController {
     private ReviewService reviewService;
 
     @PostMapping("/reviews")
-    public Review add(@RequestBody AddReviewDTO dto, HttpSession s) {
+    public SimpleReviewDTO add(@RequestBody AddReviewDTO dto, HttpSession s) {
         int id = findSessionLoggedId(s);
         return reviewService.addReview(dto, id);
     }
@@ -28,17 +29,17 @@ public class ReviewController extends GeneralController {
     }
 
     @GetMapping("/reviews/{reviewId}")
-    public Review showReview(@PathVariable int reviewId) {
+    public SimpleReviewDTO showReview(@PathVariable int reviewId) {
         return reviewService.showReview(reviewId);
     }
 
     @GetMapping("/reviews/user/{userId}")
-    public List<Review> showUserReviews(@PathVariable int userId) {
+    public List<SimpleReviewDTO> showUserReviews(@PathVariable int userId) {
         return reviewService.showUserReviews(userId);
     }
 
     @GetMapping("/reviews/product/{productId}")
-    public List<Review> showProductReviews(@PathVariable int productId) {
+    public List<SimpleReviewDTO> showProductReviews(@PathVariable int productId) {
         return reviewService.showProductReviews(productId);
     }
 
