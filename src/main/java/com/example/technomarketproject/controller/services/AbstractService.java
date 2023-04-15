@@ -5,6 +5,8 @@ import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +15,8 @@ public abstract class AbstractService {
     protected SubcategoryRepository subcategoryRepository;
     @Autowired
     protected ProductRepository productRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     protected UserRepository userRepository;
     @Autowired

@@ -6,6 +6,7 @@ import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class UserService extends AbstractService {
             throw new BadRequestException("Phone number already exists!");
         }
         User u = mapper.map(dto, User.class);
+        String encodedPass = passwordEncoder.encode(u.getPassword());
+        u.setPassword(encodedPass);
         userRepository.save(u);
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
@@ -38,15 +41,11 @@ public class UserService extends AbstractService {
         if(!existsByEmail){
             throw new BadRequestException("No user with this email exists!");
         }
-        boolean existsByEmailAndPass = userRepository.existsByEmailAndPassword(dto.getEmail(), dto.getPassword());
-        if(!existsByEmailAndPass){
+        User u = userRepository.findByEmail(dto.getEmail());
+        if(!passwordEncoder.matches(dto.getPassword(), u.getPassword())){
             throw new UnauthorizedException("Invalid password!");
         }
-        Optional<User> user = userRepository.findByEmailAndPassword(dto.getEmail(), dto.getPassword());
-        if(user.isEmpty()){
-            throw new FileNotFoundException("User not found!");
-        }
-        return mapper.map(user.get(), UserWithoutPasswordDTO.class);
+        return mapper.map(u, UserWithoutPasswordDTO.class);
     }
 
     public UserWithoutPasswordDTO changePassword(int userId, int loggedId, ChangePasswordDTO dto) {
@@ -55,6 +54,10 @@ public class UserService extends AbstractService {
         }
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can change other people's passwords.");
+        }
+        User u = userRepository.findById(userId).get();
+        if(!passwordEncoder.matches(dto.getOldPassword(), u.getPassword())){
+            throw new UnauthorizedException("Invalid current password!");
         }
         if (dto.getOldPassword().equals(dto.getNewPassword())) {
             throw new BadRequestException("New password and old password must be different!");
@@ -65,8 +68,8 @@ public class UserService extends AbstractService {
         if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
             throw new BadRequestException("Password mismatch!");
         }
-        User u = userRepository.findById(userId).get();
-        u.setPassword(dto.getNewPassword());
+        String encodedPass = passwordEncoder.encode(dto.getNewPassword());
+        u.setPassword(encodedPass);
         userRepository.save(u);
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
