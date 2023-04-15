@@ -1,8 +1,11 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddOrderDTO;
+import com.example.technomarketproject.model.DTOs.ProductWithIdOnlyDTO;
 import com.example.technomarketproject.model.DTOs.SimpleOrderDTO;
+import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.entities.Order;
+import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -41,6 +44,10 @@ public class OrderService extends AbstractService{
         Order order = mapper.map(dto, Order.class);
         order.setUser(u);
         orderRepository.save(order);
+        SimpleOrderDTO so = mapper.map(order, SimpleOrderDTO.class);
+        for(Product p : order.getProducts()){
+            so.getProducts().add(mapper.map(p, ProductWithIdOnlyDTO.class));
+        }
         return mapper.map(order, SimpleOrderDTO.class);
     }
 

@@ -5,18 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SimpleOrderDTO {
+public class ReviewWithoutProductDTO {
     private int id;
-    private LocalDate orderDate;
-    private String deliveryAddress;
-    private double totalPrice;
+    private String title;
+    private String comment;
+    private double rating;
     private UserWithoutPasswordDTO user;
-    private List<ProductWithIdOnlyDTO> products;
 }

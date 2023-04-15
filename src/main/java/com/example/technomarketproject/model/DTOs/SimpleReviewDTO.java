@@ -1,6 +1,5 @@
 package com.example.technomarketproject.model.DTOs;
 
-import com.example.technomarketproject.model.entities.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SimpleReviewDTO {
-    private int id;
-    private String title;
-    private String comment;
-    private double rating;
+public class SimpleReviewDTO extends ReviewWithoutProductDTO {
     private ProductWithIdOnlyDTO productId;
-    private UserWithoutPasswordDTO user;
 }

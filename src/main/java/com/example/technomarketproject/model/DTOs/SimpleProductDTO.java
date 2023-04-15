@@ -19,5 +19,5 @@ public class SimpleProductDTO {
     private double price;
     private String description;
     private List<SimpleProductCharacteristicDTO> values;
-    private List<Review> reviews;
+    private List<ReviewWithoutProductDTO> reviews;
 }
