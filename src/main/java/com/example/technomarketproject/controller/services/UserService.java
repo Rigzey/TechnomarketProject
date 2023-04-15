@@ -19,6 +19,9 @@ public class UserService extends AbstractService {
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             throw new BadRequestException("Password mismatch");
         }
+        if(!dto.getEmail().matches("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")){
+            throw new BadRequestException("Invalid email address!");
+        }
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new BadRequestException("Email already exists!");
         }
