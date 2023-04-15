@@ -21,15 +21,15 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    private Product productId;
 
-    @Column(name = "title")
+    @Column
     private String title;
 
-    @Column(name = "description")
-    private String description;
+    @Column
+    private String comment;
 
-    @Column(name = "rating")
+    @Column
     private double rating;
 
 }

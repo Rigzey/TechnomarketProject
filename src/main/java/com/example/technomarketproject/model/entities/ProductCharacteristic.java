@@ -8,19 +8,15 @@ import lombok.Setter;
 @Setter
 @Entity(name = "product_characteristics")
 public class ProductCharacteristic {
-    @EmbeddedId
-    ProductCharacteristicKey id;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     @ManyToOne
-    @MapsId("productId")
     @JoinColumn(name = "product_id")
-    Product product;
-
+    private Product product;
     @ManyToOne
-    @MapsId("characteristicId")
     @JoinColumn(name = "characteristic_id")
-    Characteristic characteristic;
-
+    private Characteristic characteristic;
     @Column
-    String value;
+    private String value;
 }

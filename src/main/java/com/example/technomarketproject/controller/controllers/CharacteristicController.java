@@ -3,7 +3,6 @@ package com.example.technomarketproject.controller.controllers;
 import com.example.technomarketproject.controller.services.CharacteristicService;
 import com.example.technomarketproject.model.DTOs.AddNewCharacteristicDTO;
 import com.example.technomarketproject.model.entities.Characteristic;
-import com.sun.net.httpserver.HttpsServer;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

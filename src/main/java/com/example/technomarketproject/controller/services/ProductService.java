@@ -1,7 +1,8 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddProductDTO;
-import com.example.technomarketproject.model.DTOs.CharacteristicsWithValuesDTO;
+import com.example.technomarketproject.model.DTOs.CharacteristicWithValuesDTO;
+import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.entities.Characteristic;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ProductCharacteristic;
@@ -10,7 +11,7 @@ import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.CharacteristicRepository;
-import com.example.technomarketproject.model.repositories.ProductRepository;
+import com.example.technomarketproject.model.repositories.ProductCharacteristicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,11 @@ import java.util.Optional;
 
 @Service
 public class ProductService extends AbstractService{
-
+    @Autowired
+    private ProductCharacteristicRepository productCharacteristicRepository;
     @Autowired
     private CharacteristicRepository characteristicRepository;
-    public Product addProduct(AddProductDTO dto, int id) {
+    public SimpleProductDTO addProduct(AddProductDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
         }
@@ -46,8 +48,8 @@ public class ProductService extends AbstractService{
         p.setName(dto.getName());
         p.setPrice(dto.getPrice());
         p.setDescription(dto.getDescription());
-
-        for(CharacteristicsWithValuesDTO c : dto.getCharacteristics()){
+        productRepository.save(p);
+        for(CharacteristicWithValuesDTO c : dto.getCharacteristics()){
             Optional<Characteristic> opt = characteristicRepository.findById(c.getId());
             if(opt.isEmpty()){
                 throw new BadRequestException("No characteristic with id " + c.getId() + " found!");
@@ -56,9 +58,9 @@ public class ProductService extends AbstractService{
             pc.setProduct(p);
             pc.setCharacteristic(opt.get());
             pc.setValue(c.getValue());
+            productCharacteristicRepository.save(pc);
         }
-        productRepository.save(p);
-        return p;
+        return mapper.map(p, SimpleProductDTO.class);
     }
 
     public void removeProduct(int productId, int userId) {
@@ -68,11 +70,11 @@ public class ProductService extends AbstractService{
         productRepository.deleteById(productId);
     }
 
-    public Product showSpecificProduct(int productId) {
+    public SimpleProductDTO showSpecificProduct(int productId) {
         Optional<Product> opt = productRepository.findById(productId);
         if(opt.isEmpty()){
             throw new FileNotFoundException("Product with id " + productId + " not found!");
         }
-        return opt.get();
+        return mapper.map(opt.get(), SimpleProductDTO.class);
     }
 }

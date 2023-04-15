@@ -1,10 +1,8 @@
 package com.example.technomarketproject.model.entities;
 
-import com.example.technomarketproject.model.DTOs.CharacteristicsWithValuesDTO;
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Entity(name = "products")
@@ -35,7 +33,7 @@ public class Product {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "productId")
     private List<ShoppingCart> shoppingCarts;
 
     @OneToMany(mappedBy = "product")
@@ -44,6 +42,6 @@ public class Product {
     @ManyToMany(mappedBy = "products")
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "productId")
     private List<Review> reviews;
 }

@@ -12,5 +12,5 @@ public class AddProductDTO {
     private int subcategoryId;
     private double price;
     private String description;
-    private List<CharacteristicsWithValuesDTO> characteristics;
+    private List<CharacteristicWithValuesDTO> characteristics;
 }

@@ -1,20 +1,26 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddSubcategoryDTO;
+import com.example.technomarketproject.model.DTOs.SimpleSubcategoryDTO;
 import com.example.technomarketproject.model.entities.Category;
 import com.example.technomarketproject.model.entities.Subcategory;
+import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubcategoryService extends AbstractService{
-    public Subcategory addSubcategory(AddSubcategoryDTO dto, int userId) {
+    public SimpleSubcategoryDTO addSubcategory(AddSubcategoryDTO dto, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
+        }
+        if(subcategoryRepository.existsByName(dto.getName())){
+            throw new BadRequestException("Subcategory with this name already exists!");
         }
         Subcategory subcategory = new Subcategory();
         Optional<Category> opt = categoryRepository.findById(dto.getCategoryId());
@@ -24,25 +30,31 @@ public class SubcategoryService extends AbstractService{
         subcategory.setCategory(opt.get());
         subcategory.setName(dto.getName());
         subcategoryRepository.save(subcategory);
-        return subcategory;
+        return mapper.map(subcategory, SimpleSubcategoryDTO.class);
     }
 
     public void removeSubcategory(int id, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
         }
+        if(!subcategoryRepository.existsById(id)){
+            throw new FileNotFoundException("Subcategory with this id not found!");
+        }
         subcategoryRepository.deleteById(id);
     }
 
-    public Subcategory showSpecificSubcategory(int id) {
+    public SimpleSubcategoryDTO showSpecificSubcategory(int id) {
         Optional<Subcategory> opt = subcategoryRepository.findById(id);
         if(opt.isEmpty()){
             throw new FileNotFoundException("Subcategory with this id not found!");
         }
-        return opt.get();
+        return mapper.map(opt.get(), SimpleSubcategoryDTO.class);
     }
 
-    public List<Subcategory> showAllSubcategories() {
-        return subcategoryRepository.findAll();
+    public List<SimpleSubcategoryDTO> showAllSubcategories() {
+        return subcategoryRepository.findAll()
+                .stream()
+                .map(o -> mapper.map(o, SimpleSubcategoryDTO.class))
+                .collect(Collectors.toList());
     }
 }

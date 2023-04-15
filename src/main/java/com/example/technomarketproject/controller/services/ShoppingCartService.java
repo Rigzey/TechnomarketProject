@@ -1,6 +1,7 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
+import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ShoppingCart;
 import com.example.technomarketproject.model.entities.User;
@@ -18,7 +19,7 @@ public class ShoppingCartService extends AbstractService {
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
 
-    public ShoppingCart addProduct(AddToShoppingCartDTO dto, int id) {
+    public SimpleShoppingCartDTO addProduct(AddToShoppingCartDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
             throw new FileNotFoundException("User with id " + id + " not found!");
@@ -26,7 +27,7 @@ public class ShoppingCartService extends AbstractService {
         ShoppingCart sc = mapper.map(dto, ShoppingCart.class);
         sc.setUser(opt.get());
         shoppingCartRepository.save(sc);
-        return sc;
+        return mapper.map(sc, SimpleShoppingCartDTO.class);
     }
 
     public void deleteProduct(int userId, int productId, int quantity) {
@@ -38,7 +39,7 @@ public class ShoppingCartService extends AbstractService {
         if(optProduct.isEmpty()){
             throw new FileNotFoundException("Product with id " + productId + " not found!");
         }
-        Optional<ShoppingCart> opt = shoppingCartRepository.findShoppingCartByUserAndProduct(optUser.get(), optProduct.get());
+        Optional<ShoppingCart> opt = shoppingCartRepository.findShoppingCartByUserAndProductId(optUser.get(), optProduct.get());
         if(opt.isEmpty()){
             throw new FileNotFoundException("Shopping cart does not exist!");
         }

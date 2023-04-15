@@ -21,5 +21,4 @@ public class UserWithoutPasswordDTO {
     private LocalDate dateOfBirth;
     private String phoneNumber;
     private String address;
-    private boolean emailSubscription;
 }

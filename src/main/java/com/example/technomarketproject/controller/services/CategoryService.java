@@ -1,7 +1,7 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddCategoryDTO;
-import com.example.technomarketproject.model.DTOs.CategoryWithNameIdOnlyDTO;
+import com.example.technomarketproject.model.DTOs.SimpleCategoryDTO;
 import com.example.technomarketproject.model.entities.Category;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService extends AbstractService {
 
-    public Category addCategory(AddCategoryDTO dto, int id) {
+    public SimpleCategoryDTO addCategory(AddCategoryDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
         }
@@ -26,7 +27,7 @@ public class CategoryService extends AbstractService {
         }
         Category category = mapper.map(dto, Category.class);
         categoryRepository.save(category);
-        return category;
+        return mapper.map(category, SimpleCategoryDTO.class);
     }
 
     public void removeCategory(int categoryId, int userId) {
@@ -36,15 +37,18 @@ public class CategoryService extends AbstractService {
         categoryRepository.deleteById(categoryId);
     }
 
-    public Category showCategory(int categoryId) {
+    public SimpleCategoryDTO showCategory(int categoryId) {
         Optional<Category> opt = categoryRepository.findById(categoryId);
-        if (opt.isPresent()) {
-            return opt.get();
+        if (opt.isEmpty()) {
+            throw new FileNotFoundException("Category with this id not found!");
         }
-        throw new FileNotFoundException("Category with this id not found!");
+        return mapper.map(opt.get(), SimpleCategoryDTO.class);
     }
 
-    public List<Category> showAll() {
-        return categoryRepository.findAll();
+    public List<SimpleCategoryDTO> showAll() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(o -> mapper.map(o, SimpleCategoryDTO.class))
+                .collect(Collectors.toList());
     }
 }

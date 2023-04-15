@@ -2,7 +2,6 @@ package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddOrderDTO;
 import com.example.technomarketproject.model.entities.Order;
-import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;

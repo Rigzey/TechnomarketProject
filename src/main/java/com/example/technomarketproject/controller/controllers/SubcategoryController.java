@@ -2,7 +2,7 @@ package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.controller.services.SubcategoryService;
 import com.example.technomarketproject.model.DTOs.AddSubcategoryDTO;
-import com.example.technomarketproject.model.entities.Subcategory;
+import com.example.technomarketproject.model.DTOs.SimpleSubcategoryDTO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class SubcategoryController extends GeneralController{
     private SubcategoryService subcategoryService;
 
     @PostMapping("/subcategories")
-    public Subcategory add(@RequestBody AddSubcategoryDTO dto, HttpSession s){
+    public SimpleSubcategoryDTO add(@RequestBody AddSubcategoryDTO dto, HttpSession s){
         int userId = findSessionLoggedId(s);
         return subcategoryService.addSubcategory(dto, userId);
     }
@@ -25,11 +25,11 @@ public class SubcategoryController extends GeneralController{
         subcategoryService.removeSubcategory(id, userId);
     }
     @GetMapping("/subcategories/{id}")
-    public Subcategory showSpecific(@PathVariable int id){
+    public SimpleSubcategoryDTO showSpecific(@PathVariable int id){
         return subcategoryService.showSpecificSubcategory(id);
     }
     @GetMapping("/subcategories")
-    public List<Subcategory> showAll(){
+    public List<SimpleSubcategoryDTO> showAll(){
         return subcategoryService.showAllSubcategories();
     }
 }

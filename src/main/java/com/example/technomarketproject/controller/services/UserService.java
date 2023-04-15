@@ -76,7 +76,7 @@ public class UserService extends AbstractService {
             throw new FileNotFoundException("No such user.");
         }
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
-            throw new UnauthorizedException("Only admins can delete other user's accounts.");
+            throw new UnauthorizedException("Only admins can delete other users` accounts.");
         }
         if (!userRepository.findById(userId).get().getPassword().equals(password)) {
             throw new UnauthorizedException("Incorrect password!");
@@ -88,8 +88,8 @@ public class UserService extends AbstractService {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
         }
-        if (userId != loggedId) {
-            throw new UnauthorizedException("Unauthorized profile update attempt.");
+        if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
+            throw new UnauthorizedException("Only admins can update other users` profiles!");
         }
         User u = userRepository.findById(userId).get();
         u.setEmail(dto.getEmail());

@@ -12,8 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddToShoppingCartDTO {
-
-    private User user;
-    private Product product;
+    private Product productId;
     private int quantity;
 }
