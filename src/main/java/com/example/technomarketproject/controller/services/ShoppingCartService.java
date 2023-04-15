@@ -24,8 +24,15 @@ public class ShoppingCartService extends AbstractService {
         if(opt.isEmpty()){
             throw new FileNotFoundException("User with id " + id + " not found!");
         }
+        if(productRepository.findById(dto.getProduct().getId()).isEmpty()){
+            throw new FileNotFoundException("Product with this id does not exist!");
+        }
+        if(dto.getQuantity() <= 0){
+            throw new BadRequestException("Quantity must be positive!");
+        }
+        User u = opt.get();
         ShoppingCart sc = mapper.map(dto, ShoppingCart.class);
-        sc.setUser(opt.get());
+        sc.setUser(u);
         shoppingCartRepository.save(sc);
         return mapper.map(sc, SimpleShoppingCartDTO.class);
     }

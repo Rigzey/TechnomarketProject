@@ -20,6 +20,7 @@ public class ShoppingCartController extends GeneralController {
     @PostMapping("/cart")
     private SimpleShoppingCartDTO addProduct(@RequestBody AddToShoppingCartDTO dto, HttpSession s) {
         int id = findSessionLoggedId(s);
+        System.out.println(id);
         return shoppingCartService.addProduct(dto, id);
     }
 

@@ -33,7 +33,7 @@ public class Product {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    @OneToMany(mappedBy = "productId")
+    @OneToMany(mappedBy = "product")
     private List<ShoppingCart> shoppingCarts;
 
     @OneToMany(mappedBy = "product")
