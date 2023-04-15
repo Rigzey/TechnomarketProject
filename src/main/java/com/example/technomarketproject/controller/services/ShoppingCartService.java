@@ -1,6 +1,7 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
+import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ShoppingCart;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -25,5 +26,17 @@ public class ShoppingCartService extends AbstractService {
         sc.setUser(opt.get());
         shoppingCartRepository.save(sc);
         return sc;
+    }
+
+    public void deleteProduct(int userId, int productId, int quantity) {
+        Optional<User> optUser = userRepository.findById(userId);
+        Optional<Product> optProduct = productRepository.findById(productId);
+        if(optUser.isEmpty()){
+            throw new FileNotFoundException("User with id " + userId + " not found!");
+        }
+        if(optProduct.isEmpty()){
+            throw new FileNotFoundException("No such product in cart!");
+        }
+        // TODO
     }
 }
