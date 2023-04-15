@@ -33,7 +33,7 @@ public class UserController extends GeneralController {
         return userService.changePassword(userId, loggedId, dto);
     }
 
-    @PostMapping("users/{userId}")
+    @PostMapping("/users/{userId}")
     public void deleteUser(@PathVariable int userId, HttpSession s, @RequestBody String password) {
         int loggedId = findSessionLoggedId(s);
         userService.deleteUser(userId, loggedId, password);
@@ -45,7 +45,7 @@ public class UserController extends GeneralController {
         return userService.updateUser(userId, loggedId, dto);
     }
 
-    @GetMapping("users/{userId}")
+    @GetMapping("/users/{userId}")
     public UserWithoutPasswordDTO viewProfile(@PathVariable int userId) {
         return userService.viewProfile(userId);
     }

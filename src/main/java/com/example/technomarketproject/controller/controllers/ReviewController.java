@@ -21,7 +21,7 @@ public class ReviewController extends GeneralController {
         return reviewService.addReview(dto, id);
     }
 
-    @DeleteMapping("reviews/{reviewId}")
+    @DeleteMapping("/reviews/{reviewId}")
     public void delete(@PathVariable int reviewId, HttpSession s) {
         int userId = findSessionLoggedId(s);
         reviewService.deleteReview(reviewId, userId);
@@ -32,9 +32,14 @@ public class ReviewController extends GeneralController {
         return reviewService.showReview(reviewId);
     }
 
-    @GetMapping("reviews/user/{userId}")
+    @GetMapping("/reviews/user/{userId}")
     public List<Review> showUserReviews(@PathVariable int userId) {
         return reviewService.showUserReviews(userId);
+    }
+
+    @GetMapping("/reviews/product/{productId}")
+    public List<Review> showProductReviews(@PathVariable int productId) {
+        return reviewService.showProductReviews(productId);
     }
 
 }

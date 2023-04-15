@@ -1,6 +1,7 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.AddReviewDTO;
+import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.Review;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
@@ -57,6 +58,14 @@ public class ReviewService extends AbstractService {
         Optional<User> opt = userRepository.findById(userId);
         if(opt.isEmpty()){
             throw new FileNotFoundException("User with id " + userId + " not found!");
+        }
+        return opt.get().getReviews();
+    }
+
+    public List<Review> showProductReviews(int productId) {
+        Optional<Product> opt = productRepository.findById(productId);
+        if(opt.isEmpty()){
+            throw new FileNotFoundException("Product with id " + productId + " not found!");
         }
         return opt.get().getReviews();
     }
