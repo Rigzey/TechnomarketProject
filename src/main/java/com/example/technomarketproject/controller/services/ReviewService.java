@@ -5,6 +5,7 @@ import com.example.technomarketproject.model.entities.Review;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
+import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,17 @@ public class ReviewService extends AbstractService {
         r.setUser(opt.get());
         reviewRepository.save(r);
         return r;
+    }
+
+    public void deleteReview(int reviewId, int userId) {
+        Optional<User> optUser = userRepository.findById(userId);
+        Optional<Review> optReview = reviewRepository.findById(reviewId);
+        if(optUser.isEmpty()){
+            throw new FileNotFoundException("No user with id " + userId + " found!");
+        }
+        if(optReview.isEmpty()){
+            throw new FileNotFoundException("No review with id " + reviewId + " found!");
+        }
+        reviewRepository.deleteById(reviewId);
     }
 }
