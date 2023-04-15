@@ -1,15 +1,15 @@
 package com.example.technomarketproject.controller.services;
 
-import com.example.technomarketproject.model.DTOs.ChangePasswordDTO;
-import com.example.technomarketproject.model.DTOs.UserLoginDTO;
-import com.example.technomarketproject.model.DTOs.UserRegisterDTO;
-import com.example.technomarketproject.model.DTOs.UserWithoutPasswordDTO;
+import com.example.technomarketproject.model.DTOs.*;
+import com.example.technomarketproject.model.entities.SearchHistory;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -109,5 +109,22 @@ public class UserService extends AbstractService {
         }
         User u = userRepository.findById(userId).get();
         return mapper.map(u, UserWithoutPasswordDTO.class);
+    }
+
+    public List<ProductWithIdOnlyDTO> viewSearchHistory(int userId, int loggedId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new FileNotFoundException("No such user.");
+        }
+        if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
+            throw new UnauthorizedException("Only admins can view other people's search histroy.");
+        }
+        User u = userRepository.findById(userId).get();
+        List<SearchHistory> searchHistory = searchHistoryRepository.findByUser(u);
+        List<ProductWithIdOnlyDTO> list = new ArrayList<>();
+        for (SearchHistory s : searchHistory) {
+            ProductWithIdOnlyDTO p = mapper.map(s.getProductId(), ProductWithIdOnlyDTO.class);
+            list.add(p);
+        }
+        return list;
     }
 }
