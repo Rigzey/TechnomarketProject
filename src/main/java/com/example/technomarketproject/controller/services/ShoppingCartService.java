@@ -8,11 +8,14 @@ import com.example.technomarketproject.model.entities.ShoppingCart;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
+import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.ShoppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShoppingCartService extends AbstractService {
@@ -61,5 +64,22 @@ public class ShoppingCartService extends AbstractService {
         else{
             shoppingCartRepository.save(opt.get());
         }
+    }
+
+    public List<SimpleShoppingCartDTO> showUserCart(int userId, int loggedId) {
+        if(userId != loggedId && !findUserById(loggedId).isAdmin()){
+            throw new UnauthorizedException("Only admins can watch other users` cart!");
+        }
+        if(!userRepository.existsById(userId)){
+            throw new FileNotFoundException("User with id " + userId + " does not exist!");
+        }
+        if(!userRepository.existsById(loggedId)){
+            throw new FileNotFoundException("User with id " + loggedId + " does not exist!");
+        }
+        User u = userRepository.findById(userId).get();
+        return shoppingCartRepository.findAllByUser(u)
+                .stream()
+                .map(o -> mapper.map(o, SimpleShoppingCartDTO.class))
+                .collect(Collectors.toList());
     }
 }

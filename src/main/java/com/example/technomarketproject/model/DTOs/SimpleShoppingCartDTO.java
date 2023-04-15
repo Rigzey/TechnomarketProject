@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SimpleShoppingCartDTO {
+    private int id;
     private UserWithoutPasswordDTO user;
     private SimpleProductDTO productId;
-    private int id;
     private int quantity;
 }

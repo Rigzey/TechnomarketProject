@@ -4,13 +4,11 @@ import com.example.technomarketproject.controller.services.ShoppingCartService;
 import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
 import com.example.technomarketproject.model.DTOs.RemoveFromCartDTO;
 import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
-import com.example.technomarketproject.model.entities.ShoppingCart;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ShoppingCartController extends GeneralController {
@@ -29,4 +27,10 @@ public class ShoppingCartController extends GeneralController {
         int userId = findSessionLoggedId(s);
         shoppingCartService.deleteProduct(userId, productId, dto);
     }
+    @GetMapping("/cart/user/{userId}")
+    private List<SimpleShoppingCartDTO> showUserCart(@PathVariable int userId, HttpSession s){
+        int loggedId = findSessionLoggedId(s);
+        return shoppingCartService.showUserCart(userId, loggedId);
+    }
+
 }
