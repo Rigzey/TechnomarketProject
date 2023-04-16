@@ -20,11 +20,20 @@ public class UserService extends AbstractService {
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             throw new BadRequestException("Password mismatch");
         }
+        if(!dto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")){
+            throw new BadRequestException("Invalid email address!");
+        }
+        if(dto.getEmail().length() > 100 || dto.getEmail().length() < 6){
+            throw new BadRequestException("Invalid email size!");
+        }
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new BadRequestException("Email already exists!");
         }
-        if(!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")){
+        if(!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$") || dto.getPassword().length() < 8){
             throw new BadRequestException("Password too weak. Must contain at least one upper case, lower case and number!");
+        }
+        if(!dto.getPhoneNumber().matches("^(\\+359|0)[87-9][0-9]{7}$")){
+            throw new BadRequestException("Invalid phone number!");
         }
         if(userRepository.existsByPhoneNumber(dto.getPhoneNumber())){
             throw new BadRequestException("Phone number already exists!");
@@ -62,7 +71,7 @@ public class UserService extends AbstractService {
         if (dto.getOldPassword().equals(dto.getNewPassword())) {
             throw new BadRequestException("New password and old password must be different!");
         }
-        if(!dto.getNewPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")){
+        if(!dto.getNewPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$") || dto.getNewPassword().length() < 8){
             throw new BadRequestException("Weak password! Please choose another one.");
         }
         if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
@@ -81,7 +90,8 @@ public class UserService extends AbstractService {
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can delete other users` accounts.");
         }
-        if (!userRepository.findById(userId).get().getPassword().equals(password)) {
+        String encodedPass = userRepository.findById(userId).get().getPassword();
+        if (!passwordEncoder.matches(encodedPass, password)) {
             throw new UnauthorizedException("Incorrect password!");
         }
         userRepository.findById(userId).get().setDeleted(true);
