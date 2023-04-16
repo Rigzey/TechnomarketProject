@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class UserController extends GeneralController {
@@ -50,7 +51,7 @@ public class UserController extends GeneralController {
     }
 
     @GetMapping("/users/{userId}/history")
-    public List<ProductWithIdOnlyDTO> viewSearchHistory(@PathVariable int userId, HttpSession s) {
+    public Set<ProductWithIdOnlyDTO> viewSearchHistory(@PathVariable int userId, HttpSession s) {
         int loggedId = findSessionLoggedId(s);
         return userService.viewSearchHistory(userId, loggedId);
     }

@@ -11,9 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService extends AbstractService {
@@ -116,7 +114,7 @@ public class UserService extends AbstractService {
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
 
-    public List<ProductWithIdOnlyDTO> viewSearchHistory(int userId, int loggedId) {
+    public Set<ProductWithIdOnlyDTO> viewSearchHistory(int userId, int loggedId) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
         }
@@ -131,7 +129,7 @@ public class UserService extends AbstractService {
         if(opt.isPresent()){
             searchHistory = opt.get();
         }
-        List<ProductWithIdOnlyDTO> list = new ArrayList<>();
+        Set<ProductWithIdOnlyDTO> list = new HashSet<>();
         for (SearchHistory s : searchHistory) {
             ProductWithIdOnlyDTO p = mapper.map(s.getProductId(), ProductWithIdOnlyDTO.class);
             list.add(p);
