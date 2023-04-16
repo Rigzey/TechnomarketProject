@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductWithIdOnlyDTO {
-    protected int id;
+public class ProductWithIdNameDTO extends ProductWithIdOnlyDTO{
+    private String name;
 }

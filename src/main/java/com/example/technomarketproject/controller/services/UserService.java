@@ -1,6 +1,7 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.*;
+import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.SearchHistory;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
@@ -9,6 +10,7 @@ import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -129,5 +131,33 @@ public class UserService extends AbstractService {
             list.add(p);
         }
         return list;
+    }
+
+    public void addRemoveFavourites(ProductWithIdOnlyDTO dto, int userId) {
+        Optional<User> optU = userRepository.findById(userId);
+        if(optU.isEmpty()){
+            throw new FileNotFoundException("User with this id was not found!");
+        }
+        Optional<Product> optP = productRepository.findById(dto.getId());
+        if(optP.isEmpty()){
+            throw new FileNotFoundException("Product with this id was not found!");
+        }
+        User user = optU.get();
+        Product product = optP.get();
+        if(user.getFavourites().contains(product)){
+            user.getFavourites().remove(product);
+        }
+        else{
+            user.getFavourites().add(product);
+        }
+        userRepository.save(user);
+    }
+
+    public UserFavouritesDTO showUserFavourites(int userId) {
+        Optional<User> opt = userRepository.findById(userId);
+        if(opt.isEmpty()){
+            throw new FileNotFoundException("User with this id was not found!");
+        }
+        return mapper.map(opt.get(), UserFavouritesDTO.class);
     }
 }

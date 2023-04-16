@@ -44,4 +44,7 @@ public class Product {
 
     @OneToMany(mappedBy = "productId")
     private List<Review> reviews;
+
+    @ManyToMany(mappedBy = "favourites")
+    private List<User> favouriteOfUsers;
 }

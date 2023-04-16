@@ -54,4 +54,14 @@ public class UserController extends GeneralController {
         int loggedId = findSessionLoggedId(s);
         return userService.viewSearchHistory(userId, loggedId);
     }
+    @PostMapping("/users/favourites")
+    public void addDeleteFavourites(@RequestBody ProductWithIdOnlyDTO dto, HttpSession s){
+        int userId = findSessionLoggedId(s);
+        userService.addRemoveFavourites(dto, userId);
+    }
+    @GetMapping("/users/favourites")
+    public UserFavouritesDTO showUserFavourites(HttpSession s){
+        int userId = findSessionLoggedId(s);
+        return userService.showUserFavourites(userId);
+    }
 }
