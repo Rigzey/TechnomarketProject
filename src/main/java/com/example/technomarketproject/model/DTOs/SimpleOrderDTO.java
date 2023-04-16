@@ -17,6 +17,6 @@ public class SimpleOrderDTO {
     private LocalDate orderDate;
     private String deliveryAddress;
     private double totalPrice;
-    private UserWithoutPasswordDTO user;
+    private UserWithIdNameDTO user;
     private List<ProductWithIdOnlyDTO> products;
 }

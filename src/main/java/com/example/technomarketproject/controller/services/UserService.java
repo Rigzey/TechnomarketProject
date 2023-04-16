@@ -7,10 +7,9 @@ import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -23,16 +22,22 @@ public class UserService extends AbstractService {
         if(!dto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")){
             throw new BadRequestException("Invalid email address!");
         }
+        if(!dto.getDateOfBirth().isBefore(LocalDate.now())){
+            throw new BadRequestException("Invalid date of birth!");
+        }
         if(dto.getEmail().length() > 100 || dto.getEmail().length() < 6){
             throw new BadRequestException("Invalid email size!");
         }
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new BadRequestException("Email already exists!");
         }
+        if(dto.getGender() != 'm' && dto.getGender() != 'f'){
+            throw new BadRequestException("Invalid gender!");
+        }
         if(!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$") || dto.getPassword().length() < 8){
             throw new BadRequestException("Password too weak. Must contain at least one upper case, lower case and number!");
         }
-        if(!dto.getPhoneNumber().matches("^(\\+359|0)[87-9][0-9]{7}$")){
+        if(!dto.getPhoneNumber().matches("^0[89][0-9]{8}$")){
             throw new BadRequestException("Invalid phone number!");
         }
         if(userRepository.existsByPhoneNumber(dto.getPhoneNumber())){
@@ -83,23 +88,46 @@ public class UserService extends AbstractService {
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
 
-    public void deleteUser(int userId, int loggedId, String password) {
+    public void deleteUser(int userId, int loggedId, UserWithPassDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
         }
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can delete other users` accounts.");
         }
-        String encodedPass = userRepository.findById(userId).get().getPassword();
-        if (!passwordEncoder.matches(encodedPass, password)) {
+        String currentPass = userRepository.findById(userId).get().getPassword();
+        if (!dto.getPassword().equals(currentPass)) {
             throw new UnauthorizedException("Incorrect password!");
         }
+        User u = userRepository.findById(userId).get();
         userRepository.findById(userId).get().setDeleted(true);
+        userRepository.save(u);
     }
 
     public UserWithoutPasswordDTO updateUser(int userId, int loggedId, UserWithoutPasswordDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
+        }
+        if(dto.getGender() != 'm' && dto.getGender() != 'f'){
+            throw new BadRequestException("Invalid gender!");
+        }
+        if(!dto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")){
+            throw new BadRequestException("Invalid email address!");
+        }
+        if(dto.getEmail().length() > 100 || dto.getEmail().length() < 6){
+            throw new BadRequestException("Invalid email size!");
+        }
+        if(!dto.getDateOfBirth().isBefore(LocalDate.now())){
+            throw new BadRequestException("Invalid date of birth!");
+        }
+        if(userRepository.existsByEmail(dto.getEmail())){
+            throw new BadRequestException("Email already exists!");
+        }
+        if(!dto.getPhoneNumber().matches("^0[89][0-9]{8}$")){
+            throw new BadRequestException("Invalid phone number!");
+        }
+        if(userRepository.existsByPhoneNumber(dto.getPhoneNumber())){
+            throw new BadRequestException("Phone number already exists!");
         }
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can update other users` profiles!");
@@ -117,7 +145,8 @@ public class UserService extends AbstractService {
     }
 
     public UserWithoutPasswordDTO viewProfile(int userId) {
-        if (userRepository.findById(userId).isEmpty()) {
+        Optional<User> opt = userRepository.findById(userId);
+        if (opt.isEmpty() || opt.get().isDeleted()) {
             throw new FileNotFoundException("No such user.");
         }
         User u = userRepository.findById(userId).get();

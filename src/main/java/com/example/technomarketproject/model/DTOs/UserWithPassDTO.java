@@ -5,14 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewWithoutProductDTO {
-    protected int id;
-    protected String title;
-    protected String comment;
-    protected double rating;
-    protected UserWithIdNameDTO user;
+@Getter
+@Setter
+public class UserWithPassDTO {
+    private String password;
 }

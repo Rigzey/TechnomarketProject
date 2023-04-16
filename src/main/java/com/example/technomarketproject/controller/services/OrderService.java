@@ -42,8 +42,14 @@ public class OrderService extends AbstractService{
         User u = opt.get();
         Order order = mapper.map(dto, Order.class);
         order.setUser(u);
+        for(Product p : order.getProducts()){
+            if(productRepository.findById(p.getId()).isEmpty()){
+                throw new FileNotFoundException("Product with id " + p.getId() + " not found!");
+            }
+        }
         orderRepository.save(order);
         SimpleOrderDTO so = mapper.map(order, SimpleOrderDTO.class);
+
         for(Product p : order.getProducts()){
             so.getProducts().add(mapper.map(p, ProductWithIdOnlyDTO.class));
         }

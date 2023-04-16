@@ -33,9 +33,9 @@ public class UserController extends GeneralController {
     }
 
     @PostMapping("/users/{userId}")
-    public void deleteUser(@PathVariable int userId, HttpSession s, @RequestBody String password) {
+    public void deleteUser(@PathVariable int userId, HttpSession s, @RequestBody UserWithPassDTO dto) {
         int loggedId = findSessionLoggedId(s);
-        userService.deleteUser(userId, loggedId, password);
+        userService.deleteUser(userId, loggedId, dto);
     }
 
     @PutMapping("/users/{userId}")

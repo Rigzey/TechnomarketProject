@@ -12,10 +12,7 @@ import com.example.technomarketproject.model.repositories.ProductCharacteristicR
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,7 +68,8 @@ public class ProductService extends AbstractService{
         if(!productRepository.existsById(productId)){
             throw new FileNotFoundException("Product with this id not found!");
         }
-        productRepository.deleteById(productId);
+        Product p = productRepository.findById(productId).get();
+        removeAllAboutProduct(p);
     }
 
     public SimpleProductDTO showSpecificProduct(int productId, int userId) {

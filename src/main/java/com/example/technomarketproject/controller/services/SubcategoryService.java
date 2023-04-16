@@ -3,6 +3,7 @@ package com.example.technomarketproject.controller.services;
 import com.example.technomarketproject.model.DTOs.AddSubcategoryDTO;
 import com.example.technomarketproject.model.DTOs.SimpleSubcategoryDTO;
 import com.example.technomarketproject.model.entities.Category;
+import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.Subcategory;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -43,7 +44,8 @@ public class SubcategoryService extends AbstractService{
         if(!subcategoryRepository.existsById(id)){
             throw new FileNotFoundException("Subcategory with this id not found!");
         }
-        subcategoryRepository.deleteById(id);
+        Subcategory s = subcategoryRepository.findById(id).get();
+        removeAllAboutSubcategory(s);
     }
 
     public SimpleSubcategoryDTO showSpecificSubcategory(int id) {

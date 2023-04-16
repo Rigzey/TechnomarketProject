@@ -17,10 +17,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReviewService extends AbstractService {
-
-    @Autowired
-    private ReviewRepository reviewRepository;
-
     public SimpleReviewDTO addReview(AddReviewDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
