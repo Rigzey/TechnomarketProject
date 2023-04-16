@@ -38,11 +38,11 @@ public class ProductService extends AbstractService{
         if(productRepository.existsByName(dto.getName())){
             throw new BadRequestException("Product name must be unique!");
         }
-        if(dto.getDescription().length() > 200){
-            throw new BadRequestException("Description length cannot be more than 200!");
+        if(dto.getDescription().length() > 200 || dto.getDescription().isBlank()){
+            throw new BadRequestException("Invalid description length!");
         }
-        if(dto.getDescription().length() == 0){
-            throw new BadRequestException("Description cannot be null!");
+        if(dto.getName().length() > 45 || dto.getName().isBlank()){
+            throw new BadRequestException("Invalid name length!");
         }
         Product p = new Product();
         p.setSubcategory(optS.get());
