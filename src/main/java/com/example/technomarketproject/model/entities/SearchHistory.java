@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -26,6 +27,6 @@ public class SearchHistory {
     private Product productId;
 
     @Column(name = "last_seen")
-    private LocalDate lastSeen;
+    private LocalDateTime lastSeen;
 
 }

@@ -25,7 +25,11 @@ public class ProductController extends GeneralController {
     }
 
     @GetMapping("/products/{productId}")
-    public SimpleProductDTO showSpecific(@PathVariable int productId){
-        return productService.showSpecificProduct(productId);
+    public SimpleProductDTO showSpecific(@PathVariable int productId, HttpSession s){
+        int userId = 0;
+        if(s.getAttribute("LOGGED_ID") != null){
+            userId = (int) s.getAttribute("LOGGED_ID");
+        }
+        return productService.showSpecificProduct(productId, userId);
     }
 }

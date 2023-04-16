@@ -123,8 +123,14 @@ public class UserService extends AbstractService {
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can view other people's search histroy.");
         }
+
         User u = userRepository.findById(userId).get();
-        List<SearchHistory> searchHistory = searchHistoryRepository.findByUser(u);
+        List<SearchHistory> searchHistory = new ArrayList<>();
+
+        Optional<List<SearchHistory>> opt = searchHistoryRepository.findByUser(u);
+        if(opt.isPresent()){
+            searchHistory = opt.get();
+        }
         List<ProductWithIdOnlyDTO> list = new ArrayList<>();
         for (SearchHistory s : searchHistory) {
             ProductWithIdOnlyDTO p = mapper.map(s.getProductId(), ProductWithIdOnlyDTO.class);

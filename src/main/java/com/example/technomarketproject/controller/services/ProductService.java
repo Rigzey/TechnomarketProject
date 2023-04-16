@@ -3,10 +3,7 @@ package com.example.technomarketproject.controller.services;
 import com.example.technomarketproject.model.DTOs.AddProductDTO;
 import com.example.technomarketproject.model.DTOs.CharacteristicWithValuesDTO;
 import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
-import com.example.technomarketproject.model.entities.Characteristic;
-import com.example.technomarketproject.model.entities.Product;
-import com.example.technomarketproject.model.entities.ProductCharacteristic;
-import com.example.technomarketproject.model.entities.Subcategory;
+import com.example.technomarketproject.model.entities.*;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
@@ -15,6 +12,10 @@ import com.example.technomarketproject.model.repositories.ProductCharacteristicR
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,11 +74,19 @@ public class ProductService extends AbstractService{
         productRepository.deleteById(productId);
     }
 
-    public SimpleProductDTO showSpecificProduct(int productId) {
-        Optional<Product> opt = productRepository.findById(productId);
-        if(opt.isEmpty()){
+    public SimpleProductDTO showSpecificProduct(int productId, int userId) {
+        Optional<Product> optProduct = productRepository.findById(productId);
+        if(optProduct.isEmpty()){
             throw new FileNotFoundException("Product with id " + productId + " not found!");
         }
-        return mapper.map(opt.get(), SimpleProductDTO.class);
+        if(userId != 0){
+            User user = userRepository.findById(userId).get();
+            SearchHistory current = new SearchHistory();
+            current.setProductId(optProduct.get());
+            current.setUser(user);
+            current.setLastSeen(LocalDateTime.now());
+            searchHistoryRepository.save(current);
+        }
+        return mapper.map(optProduct.get(), SimpleProductDTO.class);
     }
 }
