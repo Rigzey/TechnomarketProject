@@ -47,7 +47,7 @@ public class SubcategoryService extends AbstractService{
             throw new FileNotFoundException("Subcategory with this id not found!");
         }
         Subcategory s = subcategoryRepository.findById(id).get();
-        removeAllAboutSubcategory(s);
+        subcategoryRepository.delete(s);
     }
 
     public SimpleSubcategoryDTO showSpecificSubcategory(int id) {

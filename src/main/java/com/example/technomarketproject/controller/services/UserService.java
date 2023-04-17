@@ -54,11 +54,14 @@ public class UserService extends AbstractService {
     public UserWithoutPasswordDTO login(UserLoginDTO dto) {
         boolean existsByEmail = userRepository.existsByEmail(dto.getEmail());
         if(!existsByEmail){
-            throw new BadRequestException("No user with this email exists!");
+            throw new FileNotFoundException("No user with this email exists!");
         }
         User u = userRepository.findByEmail(dto.getEmail());
         if(!passwordEncoder.matches(dto.getPassword(), u.getPassword())){
             throw new UnauthorizedException("Invalid password!");
+        }
+        if(u.isDeleted()){
+            throw new BadRequestException("User is deleted!");
         }
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }

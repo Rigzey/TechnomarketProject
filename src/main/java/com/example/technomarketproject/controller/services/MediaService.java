@@ -4,6 +4,7 @@ import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
+import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class MediaService extends AbstractService {
 
     @SneakyThrows
+    @Transactional
     public SimpleProductDTO upload(MultipartFile origin, int productId, int loggedId) {
 
         if(!userRepository.findById(loggedId).get().isAdmin()) {

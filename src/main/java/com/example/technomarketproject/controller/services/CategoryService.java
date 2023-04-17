@@ -46,11 +46,6 @@ public class CategoryService extends AbstractService {
             throw new FileNotFoundException("Category with id " + categoryId + " does not exist!");
         }
         Category c = categoryRepository.findById(categoryId).get();
-        for(Subcategory s : subcategoryRepository.findAll()){
-            if(s.getCategory() == c){
-                removeAllAboutSubcategory(s);
-            }
-        }
         categoryRepository.delete(c);
     }
 

@@ -71,7 +71,7 @@ public class ProductService extends AbstractService{
             throw new FileNotFoundException("Product with this id not found!");
         }
         Product p = productRepository.findById(productId).get();
-        removeAllAboutProduct(p);
+        productRepository.delete(p);
     }
     @Transactional
     public SimpleProductDTO showSpecificProduct(int productId, int userId) {

@@ -10,6 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public abstract class AbstractService {
     @Autowired
@@ -38,48 +41,5 @@ public abstract class AbstractService {
     protected User findUserById(int id){
         User u = userRepository.findById(id).orElseThrow(() -> new FileNotFoundException("User with id " + id + " not found!"));
         return u;
-    }
-    @Transactional
-    protected void removeAllAboutProduct(Product p){
-        for(ProductCharacteristic pc : productCharacteristicRepository.findAll()){
-            if(pc.getProduct() == p){
-                productCharacteristicRepository.delete(pc);
-            }
-        }
-        for(Order o : orderRepository.findAll()){
-            if(o.getProducts().contains(p)){
-                o.getProducts().remove(p);
-                orderRepository.save(o);
-            }
-        }
-        for(Review r : reviewRepository.findAll()){
-            if(r.getProductId() == p){
-                reviewRepository.delete(r);
-            }
-        }
-        for(SearchHistory sh : searchHistoryRepository.findAll()){
-            if(sh.getProductId() == p){
-                searchHistoryRepository.delete(sh);
-            }
-        }
-        for(ShoppingCart sc : shoppingCartRepository.findAll()){
-            if(sc.getProduct() == p){
-                shoppingCartRepository.delete(sc);
-            }
-        }
-        for(User u : userRepository.findAll()){
-            if(u.getFavourites().contains(p)){
-                u.getFavourites().remove(p);
-                userRepository.save(u);
-            }
-        }
-        productRepository.delete(p);
-    }
-    @Transactional
-    protected void removeAllAboutSubcategory(Subcategory s){
-        for(Product p : productRepository.findAllBySubcategory(s).get()){
-            removeAllAboutProduct(p);
-        }
-        subcategoryRepository.delete(s);
     }
 }
