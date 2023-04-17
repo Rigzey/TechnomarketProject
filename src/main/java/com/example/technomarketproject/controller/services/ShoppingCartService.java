@@ -11,6 +11,7 @@ import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.ShoppingCartRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class ShoppingCartService extends AbstractService {
 
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
-
+    @Transactional
     public SimpleShoppingCartDTO addProduct(AddToShoppingCartDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
@@ -45,7 +46,7 @@ public class ShoppingCartService extends AbstractService {
         ssc.setProductId(mapper.map(p, SimpleProductDTO.class));
         return ssc;
     }
-
+    @Transactional
     public void deleteProduct(int userId, int productId, RemoveFromCartDTO dto) {
         Optional<User> optUser = userRepository.findById(userId);
         Optional<Product> optProduct = productRepository.findById(productId);
@@ -70,7 +71,7 @@ public class ShoppingCartService extends AbstractService {
             shoppingCartRepository.save(opt.get());
         }
     }
-
+    @Transactional
     public List<SimpleShoppingCartDTO> showUserCart(int userId, int loggedId) {
         if(userId != loggedId && !findUserById(loggedId).isAdmin()){
             throw new UnauthorizedException("Only admins can watch other users` cart!");

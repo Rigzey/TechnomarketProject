@@ -8,6 +8,7 @@ import com.example.technomarketproject.model.entities.Subcategory;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class SubcategoryService extends AbstractService{
+    @Transactional
     public SimpleSubcategoryDTO addSubcategory(AddSubcategoryDTO dto, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");

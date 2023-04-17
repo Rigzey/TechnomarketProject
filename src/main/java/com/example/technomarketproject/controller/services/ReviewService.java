@@ -8,6 +8,7 @@ import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.repositories.ReviewRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReviewService extends AbstractService {
+    @Transactional
     public SimpleReviewDTO addReview(AddReviewDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
@@ -41,7 +43,7 @@ public class ReviewService extends AbstractService {
         SimpleReviewDTO sr = mapper.map(r, SimpleReviewDTO.class);
         return sr;
     }
-
+    @Transactional
     public void deleteReview(int reviewId, int userId) {
         Optional<User> optUser = userRepository.findById(userId);
         Optional<Review> optReview = reviewRepository.findById(reviewId);

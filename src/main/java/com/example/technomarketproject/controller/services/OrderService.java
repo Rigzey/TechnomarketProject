@@ -10,6 +10,7 @@ import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class OrderService extends AbstractService{
     @Autowired
     private OrderRepository orderRepository;
+    @Transactional
     public SimpleOrderDTO addOrder(AddOrderDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
@@ -55,7 +57,7 @@ public class OrderService extends AbstractService{
         }
         return mapper.map(order, SimpleOrderDTO.class);
     }
-
+    @Transactional
     public void removeOrder(int orderId, int userId) {
         Optional<User> optUser = userRepository.findById(userId);
         Optional<Order> optOrder = orderRepository.findById(orderId);
@@ -70,7 +72,7 @@ public class OrderService extends AbstractService{
         }
         orderRepository.deleteById(orderId);
     }
-
+    @Transactional
     public SimpleOrderDTO showSpecific(int orderId, int userId) {
         Optional<User> optUser = userRepository.findById(userId);
         Optional<Order> optOrder = orderRepository.findById(orderId);
@@ -85,7 +87,7 @@ public class OrderService extends AbstractService{
         }
         return mapper.map(optOrder.get(), SimpleOrderDTO.class);
     }
-
+    @Transactional
     public List<SimpleOrderDTO> showUserOrders(int userId, int sessionLoggedId) {
         Optional<User> optSession = userRepository.findById(sessionLoggedId);
         Optional<User> opt = userRepository.findById(userId);

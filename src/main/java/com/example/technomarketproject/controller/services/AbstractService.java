@@ -3,6 +3,7 @@ package com.example.technomarketproject.controller.services;
 import com.example.technomarketproject.model.entities.*;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.repositories.*;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +39,7 @@ public abstract class AbstractService {
         User u = userRepository.findById(id).orElseThrow(() -> new FileNotFoundException("User with id " + id + " not found!"));
         return u;
     }
+    @Transactional
     protected void removeAllAboutProduct(Product p){
         for(ProductCharacteristic pc : productCharacteristicRepository.findAll()){
             if(pc.getProduct() == p){
@@ -73,6 +75,7 @@ public abstract class AbstractService {
         }
         productRepository.delete(p);
     }
+    @Transactional
     protected void removeAllAboutSubcategory(Subcategory s){
         for(Product p : productRepository.findAllBySubcategory(s).get()){
             removeAllAboutProduct(p);

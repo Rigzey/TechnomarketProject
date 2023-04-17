@@ -9,6 +9,7 @@ import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.CharacteristicRepository;
 import com.example.technomarketproject.model.repositories.ProductCharacteristicRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class ProductService extends AbstractService{
     private ProductCharacteristicRepository productCharacteristicRepository;
     @Autowired
     private CharacteristicRepository characteristicRepository;
+    @Transactional
     public SimpleProductDTO addProduct(AddProductDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
@@ -71,7 +73,7 @@ public class ProductService extends AbstractService{
         Product p = productRepository.findById(productId).get();
         removeAllAboutProduct(p);
     }
-
+    @Transactional
     public SimpleProductDTO showSpecificProduct(int productId, int userId) {
         Optional<Product> optProduct = productRepository.findById(productId);
         if(optProduct.isEmpty()){

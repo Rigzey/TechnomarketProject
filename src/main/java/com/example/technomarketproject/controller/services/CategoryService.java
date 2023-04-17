@@ -9,6 +9,7 @@ import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.ProductCharacteristicRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class CategoryService extends AbstractService {
 
     @Autowired
     private ProductCharacteristicRepository productCharacteristicRepository;
+    @Transactional
     public SimpleCategoryDTO addCategory(AddCategoryDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
@@ -35,7 +37,7 @@ public class CategoryService extends AbstractService {
         categoryRepository.save(category);
         return mapper.map(category, SimpleCategoryDTO.class);
     }
-
+    @Transactional
     public void removeCategory(int categoryId, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");

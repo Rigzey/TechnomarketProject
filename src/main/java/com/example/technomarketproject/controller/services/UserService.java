@@ -7,6 +7,7 @@ import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -49,7 +50,7 @@ public class UserService extends AbstractService {
         userRepository.save(u);
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
-
+    @Transactional
     public UserWithoutPasswordDTO login(UserLoginDTO dto) {
         boolean existsByEmail = userRepository.existsByEmail(dto.getEmail());
         if(!existsByEmail){
@@ -61,7 +62,7 @@ public class UserService extends AbstractService {
         }
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
-
+    @Transactional
     public UserWithoutPasswordDTO changePassword(int userId, int loggedId, ChangePasswordDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
@@ -87,7 +88,7 @@ public class UserService extends AbstractService {
         userRepository.save(u);
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
-
+    @Transactional
     public void deleteUser(int userId, int loggedId, UserWithPassDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
@@ -103,7 +104,7 @@ public class UserService extends AbstractService {
         userRepository.findById(userId).get().setDeleted(true);
         userRepository.save(u);
     }
-
+    @Transactional
     public UserWithoutPasswordDTO updateUser(int userId, int loggedId, UserWithoutPasswordDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
@@ -149,10 +150,10 @@ public class UserService extends AbstractService {
         if (opt.isEmpty() || opt.get().isDeleted()) {
             throw new FileNotFoundException("No such user.");
         }
-        User u = userRepository.findById(userId).get();
+        User u = opt.get();
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
-
+    @Transactional
     public Set<ProductWithIdOnlyDTO> viewSearchHistory(int userId, int loggedId) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
@@ -175,7 +176,7 @@ public class UserService extends AbstractService {
         }
         return list;
     }
-
+    @Transactional
     public void addRemoveFavourites(ProductWithIdOnlyDTO dto, int userId) {
         Optional<User> optU = userRepository.findById(userId);
         if(optU.isEmpty()){
