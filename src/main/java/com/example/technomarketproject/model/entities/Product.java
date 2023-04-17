@@ -48,6 +48,6 @@ public class Product {
     @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-    @ManyToMany(mappedBy = "favourites")
+    @ManyToMany(mappedBy = "favourites", cascade = CascadeType.ALL)
     private List<User> favouriteOfUsers;
 }

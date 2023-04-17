@@ -3,6 +3,7 @@ package com.example.technomarketproject.controller.controllers;
 import com.example.technomarketproject.controller.services.UserService;
 import com.example.technomarketproject.model.DTOs.*;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class UserController extends GeneralController {
     private UserService userService;
 
     @PostMapping("/users/register")
-    public UserWithoutPasswordDTO register(@RequestBody UserRegisterDTO dto) {
+    public UserWithoutPasswordDTO register(@Valid @RequestBody UserRegisterDTO dto) {
         return userService.register(dto);
     }
 

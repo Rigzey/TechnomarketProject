@@ -17,33 +17,6 @@ import java.util.*;
 public class UserService extends AbstractService {
 
     public UserWithoutPasswordDTO register(UserRegisterDTO dto) {
-        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
-            throw new BadRequestException("Password mismatch");
-        }
-        if(!dto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")){
-            throw new BadRequestException("Invalid email address!");
-        }
-        if(!dto.getDateOfBirth().isBefore(LocalDate.now())){
-            throw new BadRequestException("Invalid date of birth!");
-        }
-        if(dto.getEmail().length() > 100 || dto.getEmail().length() < 6){
-            throw new BadRequestException("Invalid email size!");
-        }
-        if(userRepository.existsByEmail(dto.getEmail())){
-            throw new BadRequestException("Email already exists!");
-        }
-        if(dto.getGender() != 'm' && dto.getGender() != 'f'){
-            throw new BadRequestException("Invalid gender!");
-        }
-        if(!dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$") || dto.getPassword().length() < 8){
-            throw new BadRequestException("Password too weak. Must contain at least one upper case, lower case and number!");
-        }
-        if(!dto.getPhoneNumber().matches("^0[89][0-9]{8}$")){
-            throw new BadRequestException("Invalid phone number!");
-        }
-        if(userRepository.existsByPhoneNumber(dto.getPhoneNumber())){
-            throw new BadRequestException("Phone number already exists!");
-        }
         User u = mapper.map(dto, User.class);
         String encodedPass = passwordEncoder.encode(u.getPassword());
         u.setPassword(encodedPass);
