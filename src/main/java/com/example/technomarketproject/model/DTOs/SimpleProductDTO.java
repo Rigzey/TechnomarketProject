@@ -19,4 +19,5 @@ public class SimpleProductDTO {
     private String description;
     private List<SimpleProductCharacteristicDTO> values;
     private List<ReviewWithoutProductDTO> reviews;
+    private String productImageUrl;
 }

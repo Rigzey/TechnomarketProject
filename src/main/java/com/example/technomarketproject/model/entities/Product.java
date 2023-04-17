@@ -29,6 +29,9 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
+    @Column
+    private String productImageUrl;
+
     @OneToOne
     @JoinColumn(name = "discount_id")
     private Discount discount;
