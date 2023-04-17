@@ -10,5 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    Optional<List<Order>> findByProductsContaining(Product p);
 }

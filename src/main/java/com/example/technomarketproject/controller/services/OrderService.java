@@ -45,7 +45,6 @@ public class OrderService extends AbstractService{
         }
         return mapper.map(order, SimpleOrderDTO.class);
     }
-    @Transactional
     public void removeOrder(int orderId, int userId) {
         Optional<User> optUser = userRepository.findById(userId);
         Optional<Order> optOrder = orderRepository.findById(orderId);
@@ -60,7 +59,6 @@ public class OrderService extends AbstractService{
         }
         orderRepository.deleteById(orderId);
     }
-    @Transactional
     public SimpleOrderDTO showSpecific(int orderId, int userId) {
         Optional<User> optUser = userRepository.findById(userId);
         Optional<Order> optOrder = orderRepository.findById(orderId);
@@ -75,7 +73,6 @@ public class OrderService extends AbstractService{
         }
         return mapper.map(optOrder.get(), SimpleOrderDTO.class);
     }
-    @Transactional
     public List<SimpleOrderDTO> showUserOrders(int userId, int sessionLoggedId) {
         Optional<User> optSession = userRepository.findById(sessionLoggedId);
         Optional<User> opt = userRepository.findById(userId);

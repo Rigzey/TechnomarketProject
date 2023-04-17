@@ -22,7 +22,7 @@ public class CategoryService extends AbstractService {
 
     @Autowired
     private ProductCharacteristicRepository productCharacteristicRepository;
-    @Transactional
+
     public SimpleCategoryDTO addCategory(AddCategoryDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
@@ -34,6 +34,9 @@ public class CategoryService extends AbstractService {
         categoryRepository.save(category);
         return mapper.map(category, SimpleCategoryDTO.class);
     }
+    // Removing a category will remove all its subcategories
+    // All the subcategories will remove their products, etc.
+    // That is why we add Transactional
     @Transactional
     public void removeCategory(int categoryId, int userId) {
         if(!findUserById(userId).isAdmin()){

@@ -19,6 +19,8 @@ import java.util.Optional;
 public class DiscountService extends AbstractService{
     @Autowired
     private DiscountRepository discountRepository;
+    // Adding a discount will change a product
+    // So we need Transactional
     @Transactional
     public NewDiscountDTO addDiscount(AddDiscountDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
@@ -42,6 +44,8 @@ public class DiscountService extends AbstractService{
         result.setProduct(mapper.map(p, ProductWithIdOnlyDTO.class));
         return result;
     }
+    // Removing a discount will remove it from the products as well
+    // So we need Transactional here as well
     @Transactional
     public void removeDiscount(int productId, int loggedId) {
         Optional<Product> opt = productRepository.findById(productId);

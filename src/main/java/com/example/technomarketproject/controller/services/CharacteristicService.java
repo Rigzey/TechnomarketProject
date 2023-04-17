@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class CharacteristicService extends AbstractService{
     @Autowired
     private CharacteristicRepository characteristicRepository;
-    @Transactional
+
     public Characteristic addCharacteristic(AddNewCharacteristicDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
             throw new UnauthorizedException("Only admins can add new characteristics!");
@@ -26,6 +26,8 @@ public class CharacteristicService extends AbstractService{
         characteristicRepository.save(c);
         return c;
     }
+    // Removing a characteristic will also remove all products with that characteristic
+    // That`s why we need transactional
     @Transactional
     public void deleteCharacteristic(int cId, int loggedId) {
         if(!userRepository.findById(loggedId).get().isAdmin()){

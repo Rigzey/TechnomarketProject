@@ -29,7 +29,6 @@ public class UserService extends AbstractService {
         userRepository.save(u);
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
-    @Transactional
     public UserWithoutPasswordDTO login(UserLoginDTO dto) {
         boolean existsByEmail = userRepository.existsByEmail(dto.getEmail());
         if(!existsByEmail){
@@ -117,7 +116,6 @@ public class UserService extends AbstractService {
         User u = opt.get();
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
-    @Transactional
     public Set<ProductWithIdOnlyDTO> viewSearchHistory(int userId, int loggedId) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");

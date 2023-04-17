@@ -43,7 +43,6 @@ public class ShoppingCartService extends AbstractService {
         ssc.setProductId(mapper.map(p, SimpleProductDTO.class));
         return ssc;
     }
-    @Transactional
     public void deleteProduct(int userId, int productId, RemoveFromCartDTO dto) {
         Optional<User> optUser = userRepository.findById(userId);
         Optional<Product> optProduct = productRepository.findById(productId);
@@ -65,7 +64,6 @@ public class ShoppingCartService extends AbstractService {
             shoppingCartRepository.save(opt.get());
         }
     }
-    @Transactional
     public List<SimpleShoppingCartDTO> showUserCart(int userId, int loggedId) {
         if(userId != loggedId && !findUserById(loggedId).isAdmin()){
             throw new UnauthorizedException("Only admins can watch other users` cart!");

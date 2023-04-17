@@ -17,7 +17,7 @@ public class Characteristic {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "characteristic")
+    @OneToMany(mappedBy = "characteristic", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductCharacteristic> values;
 
 }

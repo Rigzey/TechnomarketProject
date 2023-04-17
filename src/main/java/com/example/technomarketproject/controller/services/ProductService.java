@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +24,8 @@ public class ProductService extends AbstractService{
     private ProductCharacteristicRepository productCharacteristicRepository;
     @Autowired
     private CharacteristicRepository characteristicRepository;
+    // Adding a product also adds another product-characteristic relationship
+    // That`s why we need Transactional
     @Transactional
     public SimpleProductDTO addProduct(AddProductDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
@@ -40,6 +44,7 @@ public class ProductService extends AbstractService{
         p.setPrice(dto.getPrice());
         p.setDescription(dto.getDescription());
         productRepository.save(p);
+        List<ProductCharacteristic> list = new ArrayList<>();
         for(CharacteristicWithValuesDTO c : dto.getCharacteristics()){
             Optional<Characteristic> opt = characteristicRepository.findById(c.getId());
             if(opt.isEmpty()){
@@ -49,11 +54,14 @@ public class ProductService extends AbstractService{
             pc.setProduct(p);
             pc.setCharacteristic(opt.get());
             pc.setValue(c.getValue());
-            productCharacteristicRepository.save(pc);
+            list.add(pc);
         }
+        productCharacteristicRepository.saveAll(list);
         return mapper.map(p, SimpleProductDTO.class);
     }
-
+    // Removing a product will also remove its reviews, product-characteristics, etc.
+    // That`s why we add Transactional
+    @Transactional
     public void removeProduct(int productId, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
@@ -64,7 +72,6 @@ public class ProductService extends AbstractService{
         Product p = productRepository.findById(productId).get();
         productRepository.delete(p);
     }
-    @Transactional
     public SimpleProductDTO showSpecificProduct(int productId, int userId) {
         Optional<Product> optProduct = productRepository.findById(productId);
         if(optProduct.isEmpty()){
