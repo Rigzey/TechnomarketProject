@@ -22,9 +22,6 @@ public class SubcategoryService extends AbstractService{
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
         }
-        if(dto.getName().length() > 45 || dto.getName().isBlank()){
-            throw new BadRequestException("Invalid name length!");
-        }
         if(subcategoryRepository.existsByName(dto.getName())){
             throw new BadRequestException("Subcategory with this name already exists!");
         }

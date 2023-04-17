@@ -28,7 +28,7 @@ public class UserController extends GeneralController {
     }
 
     @PostMapping("/users/{userId}/change-password")
-    public UserWithoutPasswordDTO changePassword(@PathVariable int userId, HttpSession s, @RequestBody ChangePasswordDTO dto) {
+    public UserWithoutPasswordDTO changePassword(@PathVariable int userId, HttpSession s, @Valid @RequestBody ChangePasswordDTO dto) {
         int loggedId = findSessionLoggedId(s);
         return userService.changePassword(userId, loggedId, dto);
     }
@@ -40,7 +40,7 @@ public class UserController extends GeneralController {
     }
 
     @PutMapping("/users/{userId}")
-    public UserWithoutPasswordDTO updateUser(@PathVariable int userId, HttpSession s, @RequestBody UserWithoutPasswordDTO dto) {
+    public UserWithoutPasswordDTO updateUser(@PathVariable int userId, HttpSession s, @Valid @RequestBody UserWithoutPasswordDTO dto) {
         int loggedId = findSessionLoggedId(s);
         return userService.updateUser(userId, loggedId, dto);
     }

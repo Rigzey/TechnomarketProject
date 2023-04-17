@@ -4,6 +4,7 @@ import com.example.technomarketproject.controller.services.CharacteristicService
 import com.example.technomarketproject.model.DTOs.AddNewCharacteristicDTO;
 import com.example.technomarketproject.model.entities.Characteristic;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ public class CharacteristicController extends GeneralController{
     private CharacteristicService characteristicService;
 
     @PostMapping("/characteristics")
-    public Characteristic add(@RequestBody AddNewCharacteristicDTO dto, HttpSession s){
+    public Characteristic add(@Valid @RequestBody AddNewCharacteristicDTO dto, HttpSession s){
         int id = findSessionLoggedId(s);
         return characteristicService.addCharacteristic(dto, id);
     }

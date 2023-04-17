@@ -4,6 +4,7 @@ import com.example.technomarketproject.controller.services.SubcategoryService;
 import com.example.technomarketproject.model.DTOs.AddSubcategoryDTO;
 import com.example.technomarketproject.model.DTOs.SimpleSubcategoryDTO;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class SubcategoryController extends GeneralController{
     private SubcategoryService subcategoryService;
 
     @PostMapping("/subcategories")
-    public SimpleSubcategoryDTO add(@RequestBody AddSubcategoryDTO dto, HttpSession s){
+    public SimpleSubcategoryDTO add(@Valid @RequestBody AddSubcategoryDTO dto, HttpSession s){
         int userId = findSessionLoggedId(s);
         return subcategoryService.addSubcategory(dto, userId);
     }

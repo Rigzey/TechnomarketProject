@@ -4,6 +4,7 @@ import com.example.technomarketproject.controller.services.ReviewService;
 import com.example.technomarketproject.model.DTOs.AddReviewDTO;
 import com.example.technomarketproject.model.DTOs.SimpleReviewDTO;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class ReviewController extends GeneralController {
     private ReviewService reviewService;
 
     @PostMapping("/reviews")
-    public SimpleReviewDTO add(@RequestBody AddReviewDTO dto, HttpSession s) {
+    public SimpleReviewDTO add(@Valid @RequestBody AddReviewDTO dto, HttpSession s) {
         int id = findSessionLoggedId(s);
         return reviewService.addReview(dto, id);
     }

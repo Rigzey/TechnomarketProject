@@ -31,17 +31,8 @@ public class ProductService extends AbstractService{
         if(optS.isEmpty()){
             throw new FileNotFoundException("Subcategory with this id does not exist");
         }
-        if(dto.getPrice() <= 0){
-            throw new BadRequestException("Price cannot be less than 0!");
-        }
         if(productRepository.existsByName(dto.getName())){
             throw new BadRequestException("Product name must be unique!");
-        }
-        if(dto.getDescription().length() > 200 || dto.getDescription().isBlank()){
-            throw new BadRequestException("Invalid description length!");
-        }
-        if(dto.getName().length() > 45 || dto.getName().isBlank()){
-            throw new BadRequestException("Invalid name length!");
         }
         Product p = new Product();
         p.setSubcategory(optS.get());

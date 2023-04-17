@@ -53,9 +53,6 @@ public class UserService extends AbstractService {
         if (dto.getOldPassword().equals(dto.getNewPassword())) {
             throw new BadRequestException("New password and old password must be different!");
         }
-        if(!dto.getNewPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$") || dto.getNewPassword().length() < 8){
-            throw new BadRequestException("Weak password! Please choose another one.");
-        }
         if (!dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
             throw new BadRequestException("Password mismatch!");
         }
@@ -84,27 +81,6 @@ public class UserService extends AbstractService {
     public UserWithoutPasswordDTO updateUser(int userId, int loggedId, UserWithoutPasswordDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
-        }
-        if(dto.getGender() != 'm' && dto.getGender() != 'f'){
-            throw new BadRequestException("Invalid gender!");
-        }
-        if(!dto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")){
-            throw new BadRequestException("Invalid email address!");
-        }
-        if(dto.getEmail().length() > 100 || dto.getEmail().length() < 6){
-            throw new BadRequestException("Invalid email size!");
-        }
-        if(!dto.getDateOfBirth().isBefore(LocalDate.now())){
-            throw new BadRequestException("Invalid date of birth!");
-        }
-        if(userRepository.existsByEmail(dto.getEmail())){
-            throw new BadRequestException("Email already exists!");
-        }
-        if(!dto.getPhoneNumber().matches("^0[89][0-9]{8}$")){
-            throw new BadRequestException("Invalid phone number!");
-        }
-        if(userRepository.existsByPhoneNumber(dto.getPhoneNumber())){
-            throw new BadRequestException("Phone number already exists!");
         }
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can update other users` profiles!");

@@ -27,9 +27,6 @@ public class CategoryService extends AbstractService {
         if(!findUserById(id).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
         }
-        if(dto.getName().isBlank() || dto.getName().length() > 45){
-            throw new BadRequestException("Invalid category name length!");
-        }
         if(categoryRepository.existsByName(dto.getName())){
             throw new BadRequestException("Category with this name already exists!");
         }

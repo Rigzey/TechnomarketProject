@@ -4,6 +4,7 @@ import com.example.technomarketproject.controller.services.OrderService;
 import com.example.technomarketproject.model.DTOs.AddOrderDTO;
 import com.example.technomarketproject.model.DTOs.SimpleOrderDTO;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class OrderController extends GeneralController{
     @Autowired
     private OrderService orderService;
     @PostMapping("/orders")
-    public SimpleOrderDTO add(@RequestBody AddOrderDTO dto, HttpSession s){
+    public SimpleOrderDTO add(@Valid @RequestBody AddOrderDTO dto, HttpSession s){
         int id = findSessionLoggedId(s);
         return orderService.addOrder(dto, id);
     }

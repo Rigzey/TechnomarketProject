@@ -24,18 +24,6 @@ public class ReviewService extends AbstractService {
         if(opt.isEmpty()){
             throw new FileNotFoundException("User with id " + id + " not found!");
         }
-        if(dto.getTitle().length() > 45 || dto.getTitle().isBlank()){
-            throw new BadRequestException("Invalid title length!");
-        }
-        if(dto.getComment().length() > 200 || dto.getComment().isBlank()){
-            throw new BadRequestException("Invalid comment length!");
-        }
-        if(!productRepository.existsById(dto.getProductId().getId())){
-            throw new FileNotFoundException("Product with this id not found!");
-        }
-        if (dto.getRating() < 1 || dto.getRating() > 10) {
-            throw new BadRequestException("Product rating should be between 1 and 10.");
-        }
         Review r = mapper.map(dto, Review.class);
         r.setUser(opt.get());
         r.setProductId(mapper.map(dto.getProductId(), Product.class));

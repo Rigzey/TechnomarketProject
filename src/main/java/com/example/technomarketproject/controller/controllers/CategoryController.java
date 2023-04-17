@@ -4,6 +4,7 @@ import com.example.technomarketproject.controller.services.CategoryService;
 import com.example.technomarketproject.model.DTOs.AddCategoryDTO;
 import com.example.technomarketproject.model.DTOs.SimpleCategoryDTO;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class CategoryController extends GeneralController{
     private CategoryService categoryService;
 
     @PostMapping("/categories")
-    public SimpleCategoryDTO addCategory(@RequestBody AddCategoryDTO dto, HttpSession s){
+    public SimpleCategoryDTO addCategory(@Valid @RequestBody AddCategoryDTO dto, HttpSession s){
         int id = findSessionLoggedId(s);
         return categoryService.addCategory(dto, id);
     }

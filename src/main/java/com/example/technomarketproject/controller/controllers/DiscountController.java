@@ -4,6 +4,7 @@ import com.example.technomarketproject.controller.services.DiscountService;
 import com.example.technomarketproject.model.DTOs.AddDiscountDTO;
 import com.example.technomarketproject.model.DTOs.NewDiscountDTO;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class DiscountController extends GeneralController {
     private DiscountService discountService;
 
     @PostMapping("/discounts")
-    public NewDiscountDTO addDiscount(@RequestBody AddDiscountDTO dto, HttpSession s){
+    public NewDiscountDTO addDiscount(@Valid @RequestBody AddDiscountDTO dto, HttpSession s){
         int id = findSessionLoggedId(s);
         return discountService.addDiscount(dto, id);
     }

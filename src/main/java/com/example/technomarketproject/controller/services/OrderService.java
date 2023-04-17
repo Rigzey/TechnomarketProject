@@ -29,18 +29,6 @@ public class OrderService extends AbstractService{
         if(opt.isEmpty()){
             throw new FileNotFoundException("User with id " + id + " not found!");
         }
-        if(dto.getDeliveryAddress().isBlank()){
-            throw new BadRequestException("Delivery address cannot be null!");
-        }
-        if(dto.getDeliveryAddress().length() > 200){
-            throw new BadRequestException("Delivery address length cannot be more than 200!");
-        }
-        if(dto.getOrderDate().isAfter(LocalDate.now())){
-            throw new BadRequestException("Invalid order date!");
-        }
-        if(dto.getTotalPrice() < 0){
-            throw new BadRequestException("Total price cannot be negative!");
-        }
         User u = opt.get();
         Order order = mapper.map(dto, Order.class);
         order.setUser(u);

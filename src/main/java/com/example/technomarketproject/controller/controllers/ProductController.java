@@ -4,6 +4,7 @@ import com.example.technomarketproject.controller.services.ProductService;
 import com.example.technomarketproject.model.DTOs.AddProductDTO;
 import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ public class ProductController extends GeneralController {
     private ProductService productService;
 
     @PostMapping("/products")
-    public SimpleProductDTO add(@RequestBody AddProductDTO dto, HttpSession s){
+    public SimpleProductDTO add(@Valid @RequestBody AddProductDTO dto, HttpSession s){
         int id = findSessionLoggedId(s);
         return productService.addProduct(dto, id);
     }

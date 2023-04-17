@@ -5,6 +5,7 @@ import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
 import com.example.technomarketproject.model.DTOs.RemoveFromCartDTO;
 import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,13 @@ public class ShoppingCartController extends GeneralController {
     private ShoppingCartService shoppingCartService;
 
     @PostMapping("/cart")
-    private SimpleShoppingCartDTO addProduct(@RequestBody AddToShoppingCartDTO dto, HttpSession s) {
+    private SimpleShoppingCartDTO addProduct(@Valid @RequestBody AddToShoppingCartDTO dto, HttpSession s) {
         int id = findSessionLoggedId(s);
         return shoppingCartService.addProduct(dto, id);
     }
 
     @PostMapping("/cart/{productId}")
-    private void deleteProduct(@PathVariable int productId, HttpSession s, @RequestBody RemoveFromCartDTO dto) {
+    private void deleteProduct(@PathVariable int productId, HttpSession s, @Valid @RequestBody RemoveFromCartDTO dto) {
         int userId = findSessionLoggedId(s);
         shoppingCartService.deleteProduct(userId, productId, dto);
     }

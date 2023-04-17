@@ -33,9 +33,6 @@ public class ShoppingCartService extends AbstractService {
         if(productRepository.findById(dto.getProduct().getId()).isEmpty()){
             throw new FileNotFoundException("Product with this id does not exist!");
         }
-        if(dto.getQuantity() <= 0){
-            throw new BadRequestException("Quantity must be positive!");
-        }
         Product p = productRepository.findById(dto.getProduct().getId()).get();
         User u = opt.get();
         ShoppingCart sc = mapper.map(dto, ShoppingCart.class);
@@ -59,9 +56,6 @@ public class ShoppingCartService extends AbstractService {
         Optional<ShoppingCart> opt = shoppingCartRepository.findShoppingCartByUserAndProduct(optUser.get(), optProduct.get());
         if(opt.isEmpty()){
             throw new FileNotFoundException("Shopping cart does not exist!");
-        }
-        if(opt.get().getQuantity() < dto.getQuantity()){
-            throw new BadRequestException("The quantity of a product cannot be negative!");
         }
         opt.get().setQuantity(opt.get().getQuantity() - dto.getQuantity());
         if(opt.get().getQuantity() == 0){
