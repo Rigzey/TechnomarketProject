@@ -44,4 +44,8 @@ public class UserRegisterDTO {
     @NotBlank(message = "Phone number is mandatory")
     @Pattern(regexp = "^0[89][0-9]{8}$", message = "Invalid phone number")
     private String phoneNumber;
+
+    @NotBlank(message = "Address cannot be null")
+    @Size(max = 200, message = "Address length cannot be more than 200")
+    private String address;
 }

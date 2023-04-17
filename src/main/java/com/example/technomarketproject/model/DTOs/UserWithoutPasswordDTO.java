@@ -15,10 +15,8 @@ import java.time.LocalDate;
 public class UserWithoutPasswordDTO {
 
     private int id;
-
-    @NotBlank(message = "Email cannot be blank")
     @Email(message = "Invalid email address")
-    @Size(min = 6, max = 100, message = "Email must be between 6 and 100 characters long")
+    @Size(max = 100, message = "Email size too big")
     private String email;
 
     @Pattern(regexp = "^[mf]$", message = "Invalid gender")
@@ -37,6 +35,7 @@ public class UserWithoutPasswordDTO {
     @NotBlank(message = "Phone number cannot be blank")
     @Pattern(regexp = "^0[89][0-9]{8}$", message = "Invalid phone number")
     private String phoneNumber;
-
+    @NotNull(message = "Address cannot be null")
+    @Size(max = 200, message = "Invalid address size")
     private String address;
 }
