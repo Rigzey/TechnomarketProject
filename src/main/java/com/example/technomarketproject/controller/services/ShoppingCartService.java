@@ -6,6 +6,7 @@ import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ShoppingCart;
+import com.example.technomarketproject.model.entities.ShoppingCartKey;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -35,10 +36,22 @@ public class ShoppingCartService extends AbstractService {
         }
         Product p = productRepository.findById(dto.getProduct().getId()).get();
         User u = opt.get();
-        ShoppingCart sc = mapper.map(dto, ShoppingCart.class);
-        sc.setProduct(p);
-        sc.setUser(u);
-        shoppingCartRepository.save(sc);
+        ShoppingCart sc = new ShoppingCart();
+        if(shoppingCartRepository.existsByUserAndProduct(u, p)){
+            sc = shoppingCartRepository.findByUserAndProduct(u, p);
+            sc.setQuantity(sc.getQuantity() + dto.getQuantity());
+            shoppingCartRepository.save(sc);
+        }
+        else{
+            ShoppingCartKey key = new ShoppingCartKey();
+            key.setProductId(p.getId());
+            key.setUserId(u.getId());
+            sc = mapper.map(dto, ShoppingCart.class);
+            sc.setProduct(p);
+            sc.setUser(u);
+            sc.setId(key);
+            shoppingCartRepository.save(sc);
+        }
         SimpleShoppingCartDTO ssc = mapper.map(sc, SimpleShoppingCartDTO.class);
         ssc.setProductId(mapper.map(p, SimpleProductDTO.class));
         return ssc;

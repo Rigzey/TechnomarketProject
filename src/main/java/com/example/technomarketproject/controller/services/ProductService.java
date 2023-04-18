@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService extends AbstractService{
@@ -46,19 +44,24 @@ public class ProductService extends AbstractService{
         productRepository.save(p);
 
         List<ProductCharacteristic> list = new ArrayList<>();
-
         for(CharacteristicWithValuesDTO c : dto.getCharacteristics()){
             Optional<Characteristic> opt = characteristicRepository.findById(c.getId());
             if(opt.isEmpty()){
                 throw new BadRequestException("No characteristic with id " + c.getId() + " found!");
             }
+            Characteristic current = opt.get();
+            ProductCharacteristicKey key = new ProductCharacteristicKey();
+            key.setProductId(p.getId());
+            key.setCharacteristicId(current.getId());
             ProductCharacteristic pc = new ProductCharacteristic();
             pc.setProduct(p);
-            pc.setCharacteristic(opt.get());
+            pc.setCharacteristic(current);
             pc.setValue(c.getValue());
+            pc.setId(key);
             list.add(pc);
         }
         productCharacteristicRepository.saveAll(list);
+
         return mapper.map(p, SimpleProductDTO.class);
     }
     // Removing a product will also remove its reviews, product-characteristics, etc.
@@ -81,7 +84,11 @@ public class ProductService extends AbstractService{
         }
         if(userId != 0){
             User user = userRepository.findById(userId).get();
+            SearchHistoryKey key = new SearchHistoryKey();
+            key.setProductId(productId);
+            key.setUserId(userId);
             SearchHistory current = new SearchHistory();
+            current.setId(key);
             current.setProductId(optProduct.get());
             current.setUser(user);
             current.setLastSeen(LocalDateTime.now());

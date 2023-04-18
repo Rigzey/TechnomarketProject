@@ -10,6 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SimpleProductCharacteristicDTO {
-    private int id;
     private CharacteristicWithValuesDTO characteristic;
 }

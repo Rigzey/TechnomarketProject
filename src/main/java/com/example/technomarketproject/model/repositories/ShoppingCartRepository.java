@@ -14,4 +14,6 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Inte
     Optional<ShoppingCart> findShoppingCartByUserAndProduct(User u, Product p);
 
     List<ShoppingCart> findAllByUser(User u);
+    boolean existsByUserAndProduct(User u, Product p);
+    ShoppingCart findByUserAndProduct(User u, Product p);
 }

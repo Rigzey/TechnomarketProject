@@ -2,14 +2,22 @@ package com.example.technomarketproject.model.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchHistoryKey implements Serializable {
     @Column(name = "user_id")
-    private int userid;
+    private int userId;
 
     @Column(name = "product_id")
     private int productId;
@@ -19,11 +27,11 @@ public class SearchHistoryKey implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SearchHistoryKey that = (SearchHistoryKey) o;
-        return userid == that.userid && productId == that.productId;
+        return userId == that.userId && productId == that.productId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userid, productId);
+        return Objects.hash(userId, productId);
     }
 }
