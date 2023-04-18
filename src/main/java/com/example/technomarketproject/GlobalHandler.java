@@ -22,33 +22,38 @@ public class GlobalHandler {
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorDTO handleUnauthorizedException(UnauthorizedException e) {
+        e.printStackTrace();
         return generateErrorDto(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO handleBadRequestException(BadRequestException e) {
+        e.printStackTrace();
         return generateErrorDto(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(FileNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorDTO handleNotFoundException(FileNotFoundException e) {
+        e.printStackTrace();
         return generateErrorDto(e.getMessage(), HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorDTO handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ErrorDTO handleValidationExceptions(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        e.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
+        e.printStackTrace();
         return generateErrorDto(errors, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorDTO handleOtherExceptions() {
+    public ErrorDTO handleOtherExceptions(Exception e) {
+        e.printStackTrace();
         return generateErrorDto("Something went wrong. Do not fire me, please!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
     private ErrorDTO generateErrorDto(Object o, HttpStatus s){
