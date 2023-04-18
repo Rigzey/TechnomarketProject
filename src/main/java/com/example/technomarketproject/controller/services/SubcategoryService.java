@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class SubcategoryService extends AbstractService{
-    @Transactional
     public SimpleSubcategoryDTO addSubcategory(AddSubcategoryDTO dto, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
