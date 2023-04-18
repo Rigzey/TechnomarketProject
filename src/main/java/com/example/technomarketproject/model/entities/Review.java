@@ -23,13 +23,10 @@ public class Review {
     @JoinColumn(name = "product_id", nullable = false)
     private Product productId;
 
-    @Column
     private String title;
 
-    @Column
     private String comment;
 
-    @Column
     private double rating;
 
 }

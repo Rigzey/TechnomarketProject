@@ -21,13 +21,10 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "order_date", nullable = false)
     private LocalDate orderDate;
 
-    @Column(name = "total_price", nullable = false)
     private double totalPrice;
 
-    @Column(nullable = false)
     private String deliveryAddress;
 
     @ManyToMany

@@ -44,7 +44,9 @@ public class ProductService extends AbstractService{
         p.setPrice(dto.getPrice());
         p.setDescription(dto.getDescription());
         productRepository.save(p);
+
         List<ProductCharacteristic> list = new ArrayList<>();
+
         for(CharacteristicWithValuesDTO c : dto.getCharacteristics()){
             Optional<Characteristic> opt = characteristicRepository.findById(c.getId());
             if(opt.isEmpty()){

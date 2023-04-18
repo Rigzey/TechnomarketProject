@@ -8,15 +8,15 @@ import lombok.Setter;
 @Setter
 @Entity(name = "product_characteristics")
 public class ProductCharacteristic {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @EmbeddedId
+    private ProductCharacteristicKey id;
     @ManyToOne
+    @MapsId("productId")
     @JoinColumn(name = "product_id")
     private Product product;
     @ManyToOne
+    @MapsId("characteristicId")
     @JoinColumn(name = "characteristic_id")
     private Characteristic characteristic;
-    @Column
     private String value;
 }

@@ -10,20 +10,18 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @Entity(name = "shopping_cart")
 public class ShoppingCart {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+    @EmbeddedId
+    private ShoppingCartKey id;
     @ManyToOne
+    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @MapsId("productId")
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column
     private int quantity;
 
 }

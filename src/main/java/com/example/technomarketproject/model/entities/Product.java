@@ -16,20 +16,16 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "subcategory_id")
     private Subcategory subcategory;
 
-    @Column(nullable = false)
     private double price;
 
-    @Column(nullable = false)
     private String description;
 
-    @Column
     private String productImageUrl;
 
     @OneToOne

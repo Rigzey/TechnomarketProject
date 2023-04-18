@@ -12,20 +12,19 @@ import java.time.LocalDateTime;
 @Builder
 @Entity(name = "search_history")
 public class SearchHistory {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @EmbeddedId
+    private SearchHistoryKey id;
 
     @OneToOne
+    @MapsId("userId")
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
+    @MapsId("productId")
     @JoinColumn(name = "product_id", nullable = false)
     private Product productId;
 
-    @Column(name = "last_seen")
     private LocalDateTime lastSeen;
 
 }
