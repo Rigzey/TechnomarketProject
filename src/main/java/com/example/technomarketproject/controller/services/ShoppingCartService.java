@@ -25,7 +25,6 @@ public class ShoppingCartService extends AbstractService {
 
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
-    @Transactional
     public SimpleShoppingCartDTO addProduct(AddToShoppingCartDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){

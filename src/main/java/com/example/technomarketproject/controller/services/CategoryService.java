@@ -20,9 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService extends AbstractService {
 
-    @Autowired
-    private ProductCharacteristicRepository productCharacteristicRepository;
-
     public SimpleCategoryDTO addCategory(AddCategoryDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
@@ -34,7 +31,6 @@ public class CategoryService extends AbstractService {
         categoryRepository.save(category);
         return mapper.map(category, SimpleCategoryDTO.class);
     }
-    @Transactional
     public void removeCategory(int categoryId, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");

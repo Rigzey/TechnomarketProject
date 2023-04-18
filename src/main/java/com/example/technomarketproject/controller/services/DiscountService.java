@@ -44,8 +44,6 @@ public class DiscountService extends AbstractService{
         result.setProduct(mapper.map(p, ProductWithIdOnlyDTO.class));
         return result;
     }
-    // Removing a discount will remove it from the products as well
-    // So we need Transactional here as well
     @Transactional
     public void removeDiscount(int productId, int loggedId) {
         Optional<Product> opt = productRepository.findById(productId);

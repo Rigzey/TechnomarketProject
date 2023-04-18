@@ -64,9 +64,6 @@ public class ProductService extends AbstractService{
 
         return mapper.map(p, SimpleProductDTO.class);
     }
-    // Removing a product will also remove its reviews, product-characteristics, etc.
-    // That`s why we add Transactional
-    @Transactional
     public void removeProduct(int productId, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
