@@ -2,6 +2,8 @@ package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.entities.Product;
+import com.example.technomarketproject.model.entities.ProductImage;
+import com.example.technomarketproject.model.entities.ProductImageKey;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import jakarta.transaction.Transactional;
@@ -12,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,7 +24,7 @@ public class MediaService extends AbstractService {
 
     @SneakyThrows
     @Transactional
-    public SimpleProductDTO upload(MultipartFile origin, int productId, int loggedId) {
+    public SimpleProductDTO uploadProductImages(List<MultipartFile> origin, int productId, int loggedId) {
 
         if(!userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can upload product images!");
@@ -32,28 +36,48 @@ public class MediaService extends AbstractService {
         }
         Product p = opt.get();
 
-        String fileName = UUID.randomUUID().toString();
-        String extension = FilenameUtils.getExtension(origin.getOriginalFilename());
-
-        fileName = fileName + "." + extension;
-
         File dir = new File("uploads");
         if(!dir.exists()) {
             dir.mkdirs();
         }
-        File f = new File(dir, fileName);
 
-        Files.copy(origin.getInputStream(), f.toPath());
+        List<String> paths = new ArrayList<>();
 
-        String path = dir.getName() + File.separator + f.getName();
+        for (MultipartFile file : origin) {
 
-        p.setProductImageUrl(path);
-        productRepository.save(p);
-        return mapper.map(p, SimpleProductDTO.class);
+            String fileName = UUID.randomUUID().toString();
+            String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+            fileName = fileName + "." + extension;
+
+            File f = new File(dir, fileName);
+            Files.copy(file.getInputStream(), f.toPath());
+
+            String path = dir.getName() + File.separator + f.getName();
+            paths.add(path);
+        }
+
+        List<ProductImage> productImages = new ArrayList<>();
+
+        for (int i = 0; i < paths.size(); i++) {
+            ProductImageKey key = new ProductImageKey();
+            key.setProductId(p.getId());
+            ProductImage image = new ProductImage();
+            image.setImageUrl(paths.get(i));
+            image.setProduct(p);
+            image.setId(key);
+            productImages.add(image);
+        }
+
+        productImageRepository.saveAll(productImages);
+
+        SimpleProductDTO dto = mapper.map(p, SimpleProductDTO.class);
+        dto.setProductImageUrls(paths);
+        return dto;
 
     }
 
-    public File download(String fileName) {
+    public File downloadProductImage(String fileName) {
         fileName = "uploads" + File.separator + fileName;
         File f = new File(fileName);
         if(f.exists()) {
@@ -62,7 +86,8 @@ public class MediaService extends AbstractService {
         throw new FileNotFoundException("File not found!");
     }
 
-    public void delete(String fileName, int loggedId) {
+    @Transactional
+    public void deleteProductImage(String fileName, int loggedId) {
 
         if(!userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can delete product images!");
@@ -72,6 +97,7 @@ public class MediaService extends AbstractService {
         File f = new File(fileName);
         if(f.exists()) {
             f.delete();
+            productImageRepository.deleteByImageUrl(fileName);
         }
         else {
             throw new FileNotFoundException("File not found!");

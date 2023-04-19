@@ -26,8 +26,6 @@ public class Product {
 
     private String description;
 
-    private String productImageUrl;
-
     @OneToOne
     @JoinColumn(name = "discount_id")
     private Discount discount;
@@ -46,4 +44,7 @@ public class Product {
 
     @ManyToMany(mappedBy = "favourites", cascade = CascadeType.ALL)
     private List<User> favouriteOfUsers;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> productImages;
 }

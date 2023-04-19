@@ -37,6 +37,8 @@ public abstract class AbstractService {
     protected CategoryRepository categoryRepository;
     @Autowired
     protected SearchHistoryRepository searchHistoryRepository;
+    @Autowired
+    protected ProductImageRepository productImageRepository;
 
     protected User findUserById(int id){
         User u = userRepository.findById(id).orElseThrow(() -> new FileNotFoundException("User with id " + id + " not found!"));
