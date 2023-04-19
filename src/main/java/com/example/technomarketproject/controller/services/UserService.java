@@ -133,7 +133,7 @@ public class UserService extends AbstractService {
         List<SearchHistory> searchHistory = new ArrayList<>();
 
         Optional<List<SearchHistory>> opt = searchHistoryRepository.findByUser(u);
-        if(opt.isPresent()){
+        if (opt.isPresent()) {
             searchHistory = opt.get();
         }
         Set<ProductWithIdOnlyDTO> list = new HashSet<>();

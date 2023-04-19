@@ -50,13 +50,6 @@ public class ShoppingCartService extends AbstractService {
             shoppingCartRepository.save(sc);
         }
         SimpleProductDTO productDTO = mapper.map(p, SimpleProductDTO.class);
-        List<String> list = new ArrayList<>();
-        for(ProductImage pi : productImageRepository.findAll()){
-            if(pi.getProduct() == p){
-                list.add(pi.getImage());
-            }
-        }
-        productDTO.setProductImages(list);
         SimpleShoppingCartDTO ssc = mapper.map(sc, SimpleShoppingCartDTO.class);
         ssc.setProductId(productDTO);
         return ssc;
@@ -96,13 +89,6 @@ public class ShoppingCartService extends AbstractService {
         List<SimpleShoppingCartDTO> list = new ArrayList<>();
         for(ShoppingCart s : shoppingCartRepository.findAllByUser(u)){
             SimpleProductDTO dto = mapper.map(s.getProduct(), SimpleProductDTO.class);
-            List<String> images = new ArrayList<>();
-            for(ProductImage pi : productImageRepository.findAll()){
-                if(pi.getProduct() == s.getProduct()){
-                    images.add(pi.getImage());
-                }
-            }
-            dto.setProductImages(images);
             SimpleShoppingCartDTO ssc = new SimpleShoppingCartDTO();
             ssc.setProductId(dto);
             ssc.setQuantity(s.getQuantity());

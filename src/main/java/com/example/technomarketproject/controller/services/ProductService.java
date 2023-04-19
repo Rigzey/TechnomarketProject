@@ -90,14 +90,6 @@ public class ProductService extends AbstractService{
             current.setLastSeen(LocalDateTime.now());
             searchHistoryRepository.save(current);
         }
-        SimpleProductDTO dto = mapper.map(optProduct.get(), SimpleProductDTO.class);
-        List<String> list = new ArrayList<>();
-        for(ProductImage pi : productImageRepository.findAll()){
-            if(pi.getProduct() == optProduct.get()){
-                list.add(pi.getImage());
-            }
-        }
-        dto.setProductImages(list);
-        return dto;
+        return mapper.map(optProduct.get(), SimpleProductDTO.class);
     }
 }
