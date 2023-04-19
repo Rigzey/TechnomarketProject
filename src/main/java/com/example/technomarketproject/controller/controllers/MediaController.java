@@ -38,7 +38,7 @@ public class MediaController extends GeneralController {
         mediaService.deleteProductImage(fileName, loggedId);
     }
 
-    @DeleteMapping("/product-image/{productId}")
+    @DeleteMapping("/product-image/product/{productId}")
     public void deleteAllProductImages(@PathVariable int productId, HttpSession s) {
         int loggedId = findSessionLoggedId(s);
         mediaService.deleteAllProductImages(productId, loggedId);

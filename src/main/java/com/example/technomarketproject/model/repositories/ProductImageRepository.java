@@ -6,15 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
 
     void deleteByImage(String fileName);
 
-    List<ProductImage> findAllByProduct_Id(int productId);
-
-    void deleteAllByProduct_Id(int productId);
-
-    List<ProductImage> findAllByProduct(Product product);
+    Optional<List<ProductImage>> findAllByProduct(Product p);
+    void deleteAllByProduct(Product p);
 }

@@ -11,8 +11,4 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     boolean existsByName(String name);
-
-    void deleteAllBySubcategory(Subcategory s);
-
-    Optional<List<Product>> findAllBySubcategory(Subcategory s);
 }
