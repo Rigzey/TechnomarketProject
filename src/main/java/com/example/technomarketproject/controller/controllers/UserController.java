@@ -27,6 +27,11 @@ public class UserController extends GeneralController {
         return user;
     }
 
+    @GetMapping("/users/logout")
+    public void logout(HttpSession session) {
+        session.invalidate();
+    }
+
     @PostMapping("/users/{userId}/change-password")
     public UserWithoutPasswordDTO changePassword(@PathVariable int userId, HttpSession s, @Valid @RequestBody ChangePasswordDTO dto) {
         int loggedId = findSessionLoggedId(s);
