@@ -25,7 +25,6 @@ public class ShoppingCartService extends AbstractService {
 
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
-    @Transactional
     public SimpleShoppingCartDTO addProduct(AddToShoppingCartDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
@@ -78,10 +77,10 @@ public class ShoppingCartService extends AbstractService {
         }
     }
     public List<SimpleShoppingCartDTO> showUserCart(int userId, int loggedId) {
-        if(userId != loggedId && !findUserById(loggedId).isAdmin()){
-            throw new UnauthorizedException("Only admins can watch other users` cart!");
+        if(userId != loggedId){
+            throw new UnauthorizedException("Cannot watch other users` cart");
         }
-        if(!userRepository.existsById(userId)){
+        if(!userRepository.existsById(userId) || userRepository.findById(userId).get().isDeleted()){
             throw new FileNotFoundException("User with id " + userId + " does not exist!");
         }
         if(!userRepository.existsById(loggedId)){

@@ -1,9 +1,7 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.*;
-import com.example.technomarketproject.model.entities.Product;
-import com.example.technomarketproject.model.entities.SearchHistory;
-import com.example.technomarketproject.model.entities.User;
+import com.example.technomarketproject.model.entities.*;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
@@ -43,7 +41,6 @@ public class UserService extends AbstractService {
         }
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
-    @Transactional
     public UserWithoutPasswordDTO changePassword(int userId, int loggedId, ChangePasswordDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
@@ -75,14 +72,22 @@ public class UserService extends AbstractService {
             throw new UnauthorizedException("Only admins can delete other users` accounts.");
         }
         String currentPass = userRepository.findById(userId).get().getPassword();
-        if (!dto.getPassword().equals(currentPass)) {
+
+        if (!passwordEncoder.matches(dto.getPassword(), currentPass)) {
             throw new UnauthorizedException("Incorrect password!");
         }
         User u = userRepository.findById(userId).get();
         userRepository.findById(userId).get().setDeleted(true);
+        List<Order> orders = orderRepository.findByUser(u);
+        List<ShoppingCart> shoppingCarts = shoppingCartRepository.findAllByUser(u);
+        List<SearchHistory> searchHistories = searchHistoryRepository.findAllByUser(u);
+        List<Review> reviews = reviewRepository.findAllByUser(u);
+        reviewRepository.deleteAll(reviews);
+        searchHistoryRepository.deleteAll(searchHistories);
+        shoppingCartRepository.deleteAll(shoppingCarts);
+        orderRepository.deleteAll(orders);
         userRepository.save(u);
     }
-    @Transactional
     public UserWithoutPasswordDTO updateUser(int userId, int loggedId, UserWithoutPasswordDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
@@ -120,8 +125,8 @@ public class UserService extends AbstractService {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
         }
-        if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
-            throw new UnauthorizedException("Only admins can view other people's search histroy.");
+        if (userId != loggedId) {
+            throw new UnauthorizedException("Cannot watch other users` history");
         }
 
         User u = userRepository.findById(userId).get();
@@ -138,10 +143,9 @@ public class UserService extends AbstractService {
         }
         return list;
     }
-    @Transactional
     public void addRemoveFavourites(ProductWithIdOnlyDTO dto, int userId) {
         Optional<User> optU = userRepository.findById(userId);
-        if(optU.isEmpty()){
+        if(optU.isEmpty() || optU.get().isDeleted()){
             throw new FileNotFoundException("User with this id was not found!");
         }
         Optional<Product> optP = productRepository.findById(dto.getId());
@@ -161,7 +165,7 @@ public class UserService extends AbstractService {
 
     public UserFavouritesDTO showUserFavourites(int userId) {
         Optional<User> opt = userRepository.findById(userId);
-        if(opt.isEmpty()){
+        if(opt.isEmpty() || opt.get().isDeleted()){
             throw new FileNotFoundException("User with this id was not found!");
         }
         return mapper.map(opt.get(), UserFavouritesDTO.class);

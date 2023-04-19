@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class OrderService extends AbstractService{
     @Autowired
     private OrderRepository orderRepository;
-    @Transactional
     public SimpleOrderDTO addOrder(AddOrderDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
@@ -76,7 +75,7 @@ public class OrderService extends AbstractService{
     public List<SimpleOrderDTO> showUserOrders(int userId, int sessionLoggedId) {
         Optional<User> optSession = userRepository.findById(sessionLoggedId);
         Optional<User> opt = userRepository.findById(userId);
-        if(opt.isEmpty()){
+        if(opt.isEmpty() || opt.get().isDeleted()){
             throw new FileNotFoundException("User with id " + userId + " not found!");
         }
         if(userId != sessionLoggedId && !optSession.get().isAdmin()){

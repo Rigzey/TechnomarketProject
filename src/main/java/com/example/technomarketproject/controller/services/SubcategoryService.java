@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class SubcategoryService extends AbstractService{
-    @Transactional
     public SimpleSubcategoryDTO addSubcategory(AddSubcategoryDTO dto, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");
@@ -35,9 +34,6 @@ public class SubcategoryService extends AbstractService{
         subcategoryRepository.save(subcategory);
         return mapper.map(subcategory, SimpleSubcategoryDTO.class);
     }
-    // Removing a subcategory will also delete all its products
-    // That`s why we need Transactional
-    @Transactional
     public void removeSubcategory(int id, int userId) {
         if(!findUserById(userId).isAdmin()){
             throw new UnauthorizedException("User must be admin!");

@@ -52,7 +52,7 @@ public class ReviewService extends AbstractService {
 
     public List<SimpleReviewDTO> showUserReviews(int userId) {
         Optional<User> opt = userRepository.findById(userId);
-        if(opt.isEmpty()){
+        if(opt.isEmpty() || opt.get().isDeleted()){
             throw new FileNotFoundException("User with id " + userId + " not found!");
         }
         return opt.get().getReviews()

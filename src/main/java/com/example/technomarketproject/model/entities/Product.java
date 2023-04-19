@@ -33,6 +33,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShoppingCart> shoppingCarts;
 
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SearchHistory> histories;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductCharacteristic> values;
 

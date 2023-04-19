@@ -12,4 +12,7 @@ import java.util.Optional;
 public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Integer> {
 
     Optional<List<SearchHistory>> findByUser(User u);
+
+    List<SearchHistory> findAllByUser(User u);
+
 }
