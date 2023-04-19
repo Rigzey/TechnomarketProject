@@ -1,6 +1,7 @@
 package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.controller.services.MediaService;
+import com.example.technomarketproject.model.DTOs.ProductForImagesDTO;
 import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -15,12 +16,11 @@ import java.util.List;
 
 @RestController
 public class MediaController extends GeneralController {
-
     @Autowired
     private MediaService mediaService;
 
     @PostMapping("/product-image/{productId}")
-    public SimpleProductDTO uploadProductImages(@RequestParam("file") List<MultipartFile> files, @PathVariable int productId, HttpSession s) {
+    public ProductForImagesDTO uploadProductImages(@RequestParam("file") List<MultipartFile> files, @PathVariable int productId, HttpSession s) {
         int loggedId = findSessionLoggedId(s);
         return mediaService.uploadProductImages(files, productId, loggedId);
     }

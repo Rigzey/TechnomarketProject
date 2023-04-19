@@ -61,7 +61,6 @@ public class ProductService extends AbstractService{
             list.add(pc);
         }
         productCharacteristicRepository.saveAll(list);
-
         return mapper.map(p, SimpleProductDTO.class);
     }
     public void removeProduct(int productId, int userId) {
@@ -91,6 +90,14 @@ public class ProductService extends AbstractService{
             current.setLastSeen(LocalDateTime.now());
             searchHistoryRepository.save(current);
         }
-        return mapper.map(optProduct.get(), SimpleProductDTO.class);
+        SimpleProductDTO dto = mapper.map(optProduct.get(), SimpleProductDTO.class);
+        List<String> list = new ArrayList<>();
+        for(ProductImage pi : productImageRepository.findAll()){
+            if(pi.getProduct() == optProduct.get()){
+                list.add(pi.getImage());
+            }
+        }
+        dto.setProductImages(list);
+        return dto;
     }
 }

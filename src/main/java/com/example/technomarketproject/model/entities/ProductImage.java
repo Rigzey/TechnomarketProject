@@ -2,9 +2,12 @@ package com.example.technomarketproject.model.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 @Entity(name = "product_images")
+@Getter
+@Setter
 public class ProductImage {
 
     @EmbeddedId
@@ -15,5 +18,6 @@ public class ProductImage {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private String imageUrl;
+    @Column(name = "image", insertable = false, updatable = false)
+    private String image;
 }

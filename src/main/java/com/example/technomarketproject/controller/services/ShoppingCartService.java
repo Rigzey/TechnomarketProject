@@ -4,10 +4,7 @@ import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
 import com.example.technomarketproject.model.DTOs.RemoveFromCartDTO;
 import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
-import com.example.technomarketproject.model.entities.Product;
-import com.example.technomarketproject.model.entities.ShoppingCart;
-import com.example.technomarketproject.model.entities.ShoppingCartKey;
-import com.example.technomarketproject.model.entities.User;
+import com.example.technomarketproject.model.entities.*;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
@@ -16,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,8 +49,16 @@ public class ShoppingCartService extends AbstractService {
             sc.setId(key);
             shoppingCartRepository.save(sc);
         }
+        SimpleProductDTO productDTO = mapper.map(p, SimpleProductDTO.class);
+        List<String> list = new ArrayList<>();
+        for(ProductImage pi : productImageRepository.findAll()){
+            if(pi.getProduct() == p){
+                list.add(pi.getImage());
+            }
+        }
+        productDTO.setProductImages(list);
         SimpleShoppingCartDTO ssc = mapper.map(sc, SimpleShoppingCartDTO.class);
-        ssc.setProductId(mapper.map(p, SimpleProductDTO.class));
+        ssc.setProductId(productDTO);
         return ssc;
     }
     public void deleteProduct(int userId, int productId, RemoveFromCartDTO dto) {
@@ -89,8 +95,16 @@ public class ShoppingCartService extends AbstractService {
         User u = userRepository.findById(userId).get();
         List<SimpleShoppingCartDTO> list = new ArrayList<>();
         for(ShoppingCart s : shoppingCartRepository.findAllByUser(u)){
+            SimpleProductDTO dto = mapper.map(s.getProduct(), SimpleProductDTO.class);
+            List<String> images = new ArrayList<>();
+            for(ProductImage pi : productImageRepository.findAll()){
+                if(pi.getProduct() == s.getProduct()){
+                    images.add(pi.getImage());
+                }
+            }
+            dto.setProductImages(images);
             SimpleShoppingCartDTO ssc = new SimpleShoppingCartDTO();
-            ssc.setProductId(mapper.map(s.getProduct(), SimpleProductDTO.class));
+            ssc.setProductId(dto);
             ssc.setQuantity(s.getQuantity());
             list.add(ssc);
         }

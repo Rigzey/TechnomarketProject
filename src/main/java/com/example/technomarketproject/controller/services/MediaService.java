@@ -1,5 +1,6 @@
 package com.example.technomarketproject.controller.services;
 
+import com.example.technomarketproject.model.DTOs.ProductForImagesDTO;
 import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ProductImage;
@@ -24,7 +25,7 @@ public class MediaService extends AbstractService {
 
     @SneakyThrows
     @Transactional
-    public SimpleProductDTO uploadProductImages(List<MultipartFile> origin, int productId, int loggedId) {
+    public ProductForImagesDTO uploadProductImages(List<MultipartFile> origin, int productId, int loggedId) {
 
         if(!userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can upload product images!");
@@ -44,7 +45,6 @@ public class MediaService extends AbstractService {
         List<String> paths = new ArrayList<>();
 
         for (MultipartFile file : origin) {
-
             String fileName = UUID.randomUUID().toString();
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
@@ -61,20 +61,21 @@ public class MediaService extends AbstractService {
 
         for (int i = 0; i < paths.size(); i++) {
             ProductImageKey key = new ProductImageKey();
+            key.setUrl(paths.get(i));
             key.setProductId(p.getId());
             ProductImage image = new ProductImage();
-            image.setImageUrl(paths.get(i));
+            image.setImage(paths.get(i));
             image.setProduct(p);
             image.setId(key);
             productImages.add(image);
         }
-
         productImageRepository.saveAll(productImages);
 
-        SimpleProductDTO dto = mapper.map(p, SimpleProductDTO.class);
-        dto.setProductImageUrls(paths);
+        ProductForImagesDTO dto = new ProductForImagesDTO();
+        dto.setId(productId);
+        dto.setName(p.getName());
+        dto.setImages(paths);
         return dto;
-
     }
 
     public File downloadProductImage(String fileName) {
@@ -97,7 +98,7 @@ public class MediaService extends AbstractService {
         File f = new File(fileName);
         if(f.exists()) {
             f.delete();
-            productImageRepository.deleteByImageUrl(fileName);
+            productImageRepository.deleteByImage(fileName);
         }
         else {
             throw new FileNotFoundException("File not found!");
