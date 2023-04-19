@@ -104,4 +104,18 @@ public class MediaService extends AbstractService {
             throw new FileNotFoundException("File not found!");
         }
     }
+
+    public void deleteAllProductImages(int productId, int loggedId) {
+
+        if(!userRepository.findById(loggedId).get().isAdmin()) {
+            throw new UnauthorizedException("Only admins can delete product images!");
+        }
+        if(!productRepository.existsById(productId)) {
+            throw new FileNotFoundException("No such product!");
+        }
+        if(productImageRepository.findAllByProduct_Id(productId).isEmpty()) {
+            throw new FileNotFoundException("No images for this product!");
+        }
+        productImageRepository.deleteAllByProduct_Id(productId);
+    }
 }

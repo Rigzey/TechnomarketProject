@@ -10,9 +10,11 @@ import java.util.Optional;
 
 public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
 
-    //void deleteByUrl(String fileName);
-
     void deleteByImage(String fileName);
+
+    List<ProductImage> findAllByProduct_Id(int productId);
+
+    void deleteAllByProduct_Id(int productId);
 
     List<ProductImage> findAllByProduct(Product product);
 }
