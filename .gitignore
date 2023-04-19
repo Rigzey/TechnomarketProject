@@ -21,7 +21,6 @@ target/
 .mvn/
 mvnw
 mvnw.cmd
-uploads/
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
