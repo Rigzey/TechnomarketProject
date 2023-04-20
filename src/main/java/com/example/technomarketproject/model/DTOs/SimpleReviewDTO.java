@@ -9,6 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SimpleReviewDTO extends ReviewWithoutProductDTO {
+public class SimpleReviewDTO {
+    private int id;
+    private String title;
+    private String comment;
+    private double rating;
+    private UserWithIdNameDTO user;
     private ProductWithIdOnlyDTO productId;
 }
