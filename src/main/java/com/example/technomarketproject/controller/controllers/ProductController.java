@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ProductController extends GeneralController {
     @Autowired
@@ -32,5 +34,10 @@ public class ProductController extends GeneralController {
             userId = (int) s.getAttribute("LOGGED_ID");
         }
         return productService.showSpecificProduct(productId, userId);
+    }
+
+    @GetMapping("/products/search/{productName}")
+    public List<SimpleProductDTO> searchProductsByName(@PathVariable String productName) {
+        return productService.searchProductsByName(productName);
     }
 }

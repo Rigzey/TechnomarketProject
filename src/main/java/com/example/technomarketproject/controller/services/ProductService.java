@@ -92,4 +92,17 @@ public class ProductService extends AbstractService{
         }
         return mapper.map(optProduct.get(), SimpleProductDTO.class);
     }
+
+    public List<SimpleProductDTO> searchProductsByName(String productName) {
+        List<Product> products = productRepository.findAllByNameContainingIgnoreCase(productName);
+        if(products.isEmpty()){
+            throw new FileNotFoundException("No products found with name containing: " + productName);
+        }
+        List<SimpleProductDTO> productDTOs = new ArrayList<>();
+        for (Product p : products) {
+            SimpleProductDTO dto = mapper.map(p, SimpleProductDTO.class);
+            productDTOs.add(dto);
+        }
+        return productDTOs;
+    }
 }
