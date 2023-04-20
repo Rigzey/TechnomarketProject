@@ -22,5 +22,4 @@ public class AddOrderDTO {
     private String deliveryAddress;
     @Min(value = 0, message = "Total price cannot be negative")
     private double totalPrice;
-    private List<ProductWithIdOnlyDTO> products;
 }

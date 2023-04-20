@@ -5,6 +5,7 @@ import com.example.technomarketproject.model.DTOs.ProductWithIdOnlyDTO;
 import com.example.technomarketproject.model.DTOs.SimpleOrderDTO;
 import com.example.technomarketproject.model.entities.Order;
 import com.example.technomarketproject.model.entities.Product;
+import com.example.technomarketproject.model.entities.ShoppingCart;
 import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class OrderService extends AbstractService{
     @Autowired
     private OrderRepository orderRepository;
+    @Transactional
     public SimpleOrderDTO addOrder(AddOrderDTO dto, int id) {
         Optional<User> opt = userRepository.findById(id);
         if(opt.isEmpty()){
@@ -36,6 +39,12 @@ public class OrderService extends AbstractService{
                 throw new FileNotFoundException("Product with id " + p.getId() + " not found!");
             }
         }
+        List<Product> list = new ArrayList<>();
+        for(ShoppingCart s : shoppingCartRepository.findAllByUser(u)){
+            list.add(s.getProduct());
+        }
+        order.setProducts(list);
+        shoppingCartRepository.deleteAllByUser(u);
         orderRepository.save(order);
         SimpleOrderDTO so = mapper.map(order, SimpleOrderDTO.class);
 

@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+
 public class ProductWithIdOnlyDTO {
     protected int id;
 }
