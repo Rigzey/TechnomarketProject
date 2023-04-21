@@ -62,11 +62,16 @@ public class ProductController extends GeneralController {
     }
 
     @PostMapping("/products/filter")
-    public List<SimpleProductDTO> filterProducts(@RequestBody ProductFilteringDTO filter) {
-        List<Product> filteredProducts = productService.filterProducts(filter);
+    public Page<SimpleProductDTO> filterProducts(
+            @RequestBody ProductFilteringDTO filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        Page<Product> filteredProducts = productService.filterProducts(filter, PageRequest.of(page, size));
         List<SimpleProductDTO> filteredProductsDTOs = filteredProducts.stream()
                 .map(product -> mapper.map(product, SimpleProductDTO.class))
                 .collect(Collectors.toList());
-        return filteredProductsDTOs;
+
+        return new PageImpl<>(filteredProductsDTOs, filteredProducts.getPageable(), filteredProducts.getTotalElements());
     }
 }

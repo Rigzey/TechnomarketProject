@@ -102,40 +102,24 @@ public class ProductService extends AbstractService{
 
         return products.map(p -> mapper.map(p, SimpleProductDTO.class));
     }
+    public Page<Product> filterProducts(ProductFilteringDTO filter, Pageable pageable) {
+        String name = filter.getName();
+        Integer subcategoryId = filter.getSubcategoryId();
+        Double priceFrom = filter.getPriceFrom();
+        Double priceTo = filter.getPriceTo();
+        String description = filter.getDescription();
+        List<Integer> characteristicIds = filter.getCharacteristicIds();
+        List<String> characteristicValues = filter.getCharacteristicValues();
 
-
-    public List<Product> filterProducts(ProductFilteringDTO filter) {
-
-        Optional<String> productName = Optional.ofNullable(filter.getName());
-        Optional<Integer> subcategoryId = Optional.ofNullable(filter.getSubcategory()).map(SubcategoryWithNameIdDTO::getId);
-        Optional<String> subcategoryName = Optional.ofNullable(filter.getSubcategory()).map(SubcategoryWithNameIdDTO::getName);
-        Optional<Integer> categoryId = Optional.ofNullable(filter.getSubcategory()).map(SimpleSubcategoryDTO::getCategory).map(CategoryWithNameIdDTO::getId);
-        Optional<String> categoryName = Optional.ofNullable(filter.getSubcategory()).map(SimpleSubcategoryDTO::getCategory).map(CategoryWithNameIdDTO::getName);
-        Optional<Double> priceFrom = Optional.ofNullable(filter.getPriceFrom());
-        Optional<Double> priceTo = Optional.ofNullable(filter.getPriceTo());
-        Optional<String> description = Optional.ofNullable(filter.getDescription());
-        Optional<List<Integer>> optionalCharacteristicIds = Optional.ofNullable(filter.getCharacteristics()).map(characteristics ->
-                characteristics.stream()
-                        .map(SimpleProductCharacteristicDTO::getCharacteristic)
-                        .map(CharacteristicWithValuesDTO::getId)
-                        .collect(Collectors.toList()));
-        Optional<List<String>> optionalCharacteristicValues = Optional.ofNullable(filter.getCharacteristics()).map(characteristics ->
-                characteristics.stream()
-                        .map(SimpleProductCharacteristicDTO::getCharacteristic)
-                        .map(CharacteristicWithValuesDTO::getValue)
-                        .collect(Collectors.toList()));
-
-        List<Product> filteredProducts = productRepository.findByMultipleCharacteristics(
-                productName,
+        Page<Product> filteredProducts = productRepository.findByMultipleCharacteristics(
+                name,
                 subcategoryId,
-                subcategoryName,
-                categoryId,
-                categoryName,
                 priceFrom,
                 priceTo,
                 description,
-                optionalCharacteristicIds,
-                optionalCharacteristicValues
+                characteristicIds,
+                characteristicValues,
+                pageable
         );
 
         return filteredProducts;

@@ -20,4 +20,5 @@ public class SimpleProductDTO {
     private List<SimpleProductCharacteristicDTO> characteristics;
     private List<ReviewWithoutProductDTO> reviews;
     private List<ProductImageDTO> productImages;
+
 }

@@ -5,13 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ProductFilteringDTO extends SimpleProductDTO {
-
-    private double priceFrom;
-    private double priceTo;
-
+@AllArgsConstructor
+public class ProductFilteringDTO {
+    private String name;
+    private Integer subcategoryId;
+    private Double priceFrom;
+    private Double priceTo;
+    private String description;
+    private List<Integer> characteristicIds;
+    private List<String> characteristicValues;
 }
