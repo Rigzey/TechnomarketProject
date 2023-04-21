@@ -5,6 +5,7 @@ import com.example.technomarketproject.model.DTOs.NewDiscountDTO;
 import com.example.technomarketproject.model.DTOs.ProductWithIdOnlyDTO;
 import com.example.technomarketproject.model.entities.Discount;
 import com.example.technomarketproject.model.entities.Product;
+import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +42,21 @@ public class DiscountService extends AbstractService{
         discountRepository.save(d);
         p.setDiscount(d);
         productRepository.save(p);
+
+        List<User> users = userRepository.findAllByFavouritesContaining(p);
+        for(User u : users){
+            if(u.isEmailSubscription()){
+                String email = u.getEmail();
+                String subject = "Product discount alert";
+                String message = "Dear " + u.getFirstName() + ",\n\n" +
+                        "The product '" + p.getName() + "' has just received a discount of " + d.getPercentageOff() + "%. " +
+                        "Its new price is " + p.getPrice() + ".\n\n" +
+                        "Best regards,\n" +
+                        "Your Online Store Team";
+                sendEmail(email, subject, message);
+            }
+        }
+
         NewDiscountDTO result = mapper.map(d, NewDiscountDTO.class);
         result.setProduct(mapper.map(p, ProductWithIdOnlyDTO.class));
         return result;

@@ -6,6 +6,8 @@ import com.example.technomarketproject.model.repositories.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public abstract class AbstractService {
+    @Autowired
+    JavaMailSender javaMailSender;
     @Autowired
     protected ProductCharacteristicRepository productCharacteristicRepository;
     @Autowired
@@ -43,5 +47,15 @@ public abstract class AbstractService {
     protected User findUserById(int id){
         User u = userRepository.findById(id).orElseThrow(() -> new FileNotFoundException("User with id " + id + " not found!"));
         return u;
+    }
+    public void sendEmail(String to, String subject, String body){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("yoanpavlov12345@gmail.com");
+        message.setTo(to);
+        message.setText(body);
+        message.setSubject(subject);
+
+        javaMailSender.send(message);
+        System.out.println("Mail sent to " + to + " successfully!");
     }
 }

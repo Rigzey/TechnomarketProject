@@ -39,10 +39,14 @@ public class ReviewService extends AbstractService {
         p.setRating(currentRating);
 
         productRepository.save(p);
-        Review r = mapper.map(dto, Review.class);
+        Review r = new Review();
         r.setUser(opt.get());
         r.setProductId(p);
+        r.setRating(dto.getRating());
+        r.setTitle(dto.getTitle());
+        r.setComment(dto.getComment());
         reviewRepository.save(r);
+
         return mapper.map(r, SimpleReviewDTO.class);
     }
     @Transactional

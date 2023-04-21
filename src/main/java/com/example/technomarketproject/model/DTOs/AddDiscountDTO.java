@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AddDiscountDTO {
 
-    @PastOrPresent(message = "Invalid start date")
+    @Future(message = "Invalid start date")
     protected LocalDate dateFrom;
 
     @Future(message = "Invalid end date")
