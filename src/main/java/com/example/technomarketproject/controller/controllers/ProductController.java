@@ -8,6 +8,11 @@ import com.example.technomarketproject.model.entities.Product;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,8 +45,20 @@ public class ProductController extends GeneralController {
     }
 
     @GetMapping("/products/search/{productName}")
-    public List<SimpleProductDTO> searchProductsByName(@PathVariable String productName) {
-        return productService.searchProductsByName(productName);
+    public ResponseEntity<Page<SimpleProductDTO>> searchProductsByName(
+            @PathVariable String productName,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SimpleProductDTO> productPage = productService.searchProductsByName(productName, pageable);
+
+        List<SimpleProductDTO> productDTOs = productPage.getContent()
+                .stream()
+                .map(p -> mapper.map(p, SimpleProductDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(new PageImpl<>(productDTOs, pageable, productPage.getTotalElements()));
     }
 
     @PostMapping("/products/filter")

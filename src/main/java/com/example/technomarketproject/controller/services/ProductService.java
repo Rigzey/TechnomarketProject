@@ -9,6 +9,8 @@ import com.example.technomarketproject.model.repositories.CharacteristicReposito
 import com.example.technomarketproject.model.repositories.ProductCharacteristicRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -92,17 +94,13 @@ public class ProductService extends AbstractService{
         return mapper.map(optProduct.get(), SimpleProductDTO.class);
     }
 
-    public List<SimpleProductDTO> searchProductsByName(String productName) {
-        List<Product> products = productRepository.findAllByNameContainingIgnoreCase(productName);
+    public Page<SimpleProductDTO> searchProductsByName(String productName, Pageable pageable) {
+        Page<Product> products = productRepository.findAllByNameContainingIgnoreCase(productName, pageable);
         if(products.isEmpty()){
             throw new FileNotFoundException("No products found with name containing: " + productName);
         }
-        List<SimpleProductDTO> productDTOs = new ArrayList<>();
-        for (Product p : products) {
-            SimpleProductDTO dto = mapper.map(p, SimpleProductDTO.class);
-            productDTOs.add(dto);
-        }
-        return productDTOs;
+
+        return products.map(p -> mapper.map(p, SimpleProductDTO.class));
     }
 
 

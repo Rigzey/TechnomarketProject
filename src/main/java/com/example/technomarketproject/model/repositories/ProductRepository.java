@@ -1,6 +1,8 @@
 package com.example.technomarketproject.model.repositories;
 
 import com.example.technomarketproject.model.entities.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +15,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     boolean existsByName(String name);
 
-    List<Product> findAllByNameContainingIgnoreCase(String name);
+    Page<Product> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 
     @Query("SELECT DISTINCT p " +
             "FROM products p " +
