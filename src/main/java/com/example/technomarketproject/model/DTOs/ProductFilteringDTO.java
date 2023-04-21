@@ -1,5 +1,7 @@
 package com.example.technomarketproject.model.DTOs;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,8 @@ import java.util.List;
 public class ProductFilteringDTO {
     private String name;
     private Integer subcategoryId;
+    private Integer categoryId;
+    private Integer ratingFrom;
     private Double priceFrom;
     private Double priceTo;
     private String description;

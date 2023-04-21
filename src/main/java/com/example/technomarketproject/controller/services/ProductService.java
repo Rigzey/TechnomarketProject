@@ -105,6 +105,8 @@ public class ProductService extends AbstractService{
     public Page<Product> filterProducts(ProductFilteringDTO filter, Pageable pageable) {
         String name = filter.getName();
         Integer subcategoryId = filter.getSubcategoryId();
+        Integer categoryId = filter.getCategoryId();
+        Integer ratingFrom = filter.getRatingFrom();
         Double priceFrom = filter.getPriceFrom();
         Double priceTo = filter.getPriceTo();
         String description = filter.getDescription();
@@ -114,6 +116,8 @@ public class ProductService extends AbstractService{
         Page<Product> filteredProducts = productRepository.findByMultipleCharacteristics(
                 name,
                 subcategoryId,
+                categoryId,
+                ratingFrom,
                 priceFrom,
                 priceTo,
                 description,
