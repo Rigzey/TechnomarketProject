@@ -70,4 +70,8 @@ public class UserController extends GeneralController {
         int userId = findSessionLoggedId(s);
         return userService.showUserFavourites(userId);
     }
+    @PostMapping("/users/forgot-password")
+    public void forgotPass(@RequestBody UserEmailDTO dto){
+        userService.forgotPass(dto);
+    }
 }

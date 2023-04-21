@@ -170,4 +170,20 @@ public class UserService extends AbstractService {
         }
         return mapper.map(opt.get(), UserFavouritesDTO.class);
     }
+
+    public void forgotPass(UserEmailDTO dto) {
+        String email = dto.getEmail();
+
+        if(!userRepository.existsByEmail(email)){
+            throw new FileNotFoundException("User with this email does not exist");
+        }
+        User u = userRepository.findByEmail(email);
+        String title = "Forgot email";
+        String msg = "Dear, " + u.getFirstName() + "\n\n"
+                + "You have requested to remember your password. \n\n"
+                + "Here it is: " + u.getPassword() + "\n\n"
+                + "If this request was not done by you, please, be cautious.";
+        sendEmail(email, title, msg);
+
+    }
 }
