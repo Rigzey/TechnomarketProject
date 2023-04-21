@@ -10,9 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewWithoutProductDTO {
-    protected int id;
-    protected String title;
-    protected String comment;
-    protected double rating;
-    protected UserWithIdNameDTO user;
+
+    private String title;
+    private String comment;
+    private double rating;
+    private UserWithIdNameDTO user;
+
 }

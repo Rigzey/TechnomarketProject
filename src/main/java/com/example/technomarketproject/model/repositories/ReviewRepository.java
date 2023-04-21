@@ -10,9 +10,9 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
-    void deleteAllByProductId(Product p);
-    void removeAllByProductId(Product p);
 
     List<Review> findAllByUser(User u);
+
+    boolean existsByUserAndProductId(User user, Product p);
 
 }

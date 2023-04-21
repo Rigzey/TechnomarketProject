@@ -26,6 +26,7 @@ public class Product {
 
     private String description;
 
+    private double rating = 0;
     @OneToOne
     @JoinColumn(name = "discount_id")
     private Discount discount;

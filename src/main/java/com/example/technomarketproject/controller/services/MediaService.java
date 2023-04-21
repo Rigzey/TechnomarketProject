@@ -77,7 +77,6 @@ public class MediaService extends AbstractService {
         dto.setImages(paths);
         return dto;
     }
-
     public File downloadProductImage(String fileName) {
         fileName = "uploads" + File.separator + fileName;
         File f = new File(fileName);
@@ -86,7 +85,6 @@ public class MediaService extends AbstractService {
         }
         throw new FileNotFoundException("File not found!");
     }
-
     @Transactional
     public void deleteProductImage(String fileName, int loggedId) {
 
