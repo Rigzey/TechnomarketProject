@@ -1,8 +1,6 @@
 package com.example.technomarketproject.controller.services;
 
-import com.example.technomarketproject.model.DTOs.AddProductDTO;
-import com.example.technomarketproject.model.DTOs.CharacteristicWithValuesDTO;
-import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
+import com.example.technomarketproject.model.DTOs.*;
 import com.example.technomarketproject.model.entities.*;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService extends AbstractService{
@@ -104,5 +103,43 @@ public class ProductService extends AbstractService{
             productDTOs.add(dto);
         }
         return productDTOs;
+    }
+
+
+    public List<Product> filterProducts(ProductFilteringDTO filter) {
+
+        Optional<String> productName = Optional.ofNullable(filter.getName());
+        Optional<Integer> subcategoryId = Optional.ofNullable(filter.getSubcategory()).map(SubcategoryWithNameIdDTO::getId);
+        Optional<String> subcategoryName = Optional.ofNullable(filter.getSubcategory()).map(SubcategoryWithNameIdDTO::getName);
+        Optional<Integer> categoryId = Optional.ofNullable(filter.getSubcategory()).map(SimpleSubcategoryDTO::getCategory).map(CategoryWithNameIdDTO::getId);
+        Optional<String> categoryName = Optional.ofNullable(filter.getSubcategory()).map(SimpleSubcategoryDTO::getCategory).map(CategoryWithNameIdDTO::getName);
+        Optional<Double> priceFrom = Optional.ofNullable(filter.getPriceFrom());
+        Optional<Double> priceTo = Optional.ofNullable(filter.getPriceTo());
+        Optional<String> description = Optional.ofNullable(filter.getDescription());
+        Optional<List<Integer>> optionalCharacteristicIds = Optional.ofNullable(filter.getCharacteristics()).map(characteristics ->
+                characteristics.stream()
+                        .map(SimpleProductCharacteristicDTO::getCharacteristic)
+                        .map(CharacteristicWithValuesDTO::getId)
+                        .collect(Collectors.toList()));
+        Optional<List<String>> optionalCharacteristicValues = Optional.ofNullable(filter.getCharacteristics()).map(characteristics ->
+                characteristics.stream()
+                        .map(SimpleProductCharacteristicDTO::getCharacteristic)
+                        .map(CharacteristicWithValuesDTO::getValue)
+                        .collect(Collectors.toList()));
+
+        List<Product> filteredProducts = productRepository.findByMultipleCharacteristics(
+                productName,
+                subcategoryId,
+                subcategoryName,
+                categoryId,
+                categoryName,
+                priceFrom,
+                priceTo,
+                description,
+                optionalCharacteristicIds,
+                optionalCharacteristicValues
+        );
+
+        return filteredProducts;
     }
 }

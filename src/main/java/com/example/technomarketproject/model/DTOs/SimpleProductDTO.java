@@ -17,7 +17,7 @@ public class SimpleProductDTO {
     private SimpleSubcategoryDTO subcategory;
     private double price;
     private String description;
-    private List<SimpleProductCharacteristicDTO> values;
+    private List<SimpleProductCharacteristicDTO> characteristics;
     private List<ReviewWithoutProductDTO> reviews;
     private List<ProductImageDTO> productImages;
 }
