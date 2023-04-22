@@ -35,7 +35,9 @@ public class OrderService extends AbstractService{
         order.setUser(u);
         List<Product> list = new ArrayList<>();
         for(ShoppingCart s : shoppingCartRepository.findAllByUser(u)){
-            list.add(s.getProduct());
+            for (int i = 0; i < s.getQuantity(); i++) {
+                list.add(s.getProduct());
+            }
         }
         if(list.isEmpty()){
             throw new BadRequestException("User has no products in the cart");

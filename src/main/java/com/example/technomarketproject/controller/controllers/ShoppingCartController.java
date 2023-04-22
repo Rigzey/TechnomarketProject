@@ -28,10 +28,10 @@ public class ShoppingCartController extends GeneralController {
         int userId = findSessionLoggedId(s);
         shoppingCartService.deleteProduct(userId, productId, dto);
     }
-    @GetMapping("/cart/user/{userId}")
-    private List<SimpleShoppingCartDTO> showUserCart(@PathVariable int userId, HttpSession s){
+    @GetMapping("/cart/user")
+    private List<SimpleShoppingCartDTO> showUserCart(HttpSession s){
         int loggedId = findSessionLoggedId(s);
-        return shoppingCartService.showUserCart(userId, loggedId);
+        return shoppingCartService.showUserCart(loggedId);
     }
 
 }

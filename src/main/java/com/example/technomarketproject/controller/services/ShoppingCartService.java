@@ -31,7 +31,7 @@ public class ShoppingCartService extends AbstractService {
         }
         Product p = productRepository.findById(dto.getProduct().getId()).get();
         User u = opt.get();
-        ShoppingCart sc = new ShoppingCart();
+        ShoppingCart sc;
         if(shoppingCartRepository.existsByUserAndProduct(u, p)){
             sc = shoppingCartRepository.findByUserAndProduct(u, p);
             sc.setQuantity(sc.getQuantity() + dto.getQuantity());
@@ -73,17 +73,14 @@ public class ShoppingCartService extends AbstractService {
             shoppingCartRepository.save(opt.get());
         }
     }
-    public List<SimpleShoppingCartDTO> showUserCart(int userId, int loggedId) {
-        if(userId != loggedId){
-            throw new UnauthorizedException("Cannot watch other users` cart");
-        }
-        if(!userRepository.existsById(userId) || userRepository.findById(userId).get().isDeleted()){
-            throw new FileNotFoundException("User with id " + userId + " does not exist!");
+    public List<SimpleShoppingCartDTO> showUserCart(int loggedId) {
+        if(!userRepository.existsById(loggedId) || userRepository.findById(loggedId).get().isDeleted()){
+            throw new FileNotFoundException("User with id " + loggedId + " does not exist!");
         }
         if(!userRepository.existsById(loggedId)){
             throw new FileNotFoundException("User with id " + loggedId + " does not exist!");
         }
-        User u = userRepository.findById(userId).get();
+        User u = userRepository.findById(loggedId).get();
         List<SimpleShoppingCartDTO> list = new ArrayList<>();
         for(ShoppingCart s : shoppingCartRepository.findAllByUser(u)){
             SimpleProductDTO dto = mapper.map(s.getProduct(), SimpleProductDTO.class);
