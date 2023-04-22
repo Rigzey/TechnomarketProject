@@ -1,7 +1,7 @@
 package com.example.technomarketproject.controller.controllers;
 
-import com.example.technomarketproject.controller.services.UserService;
 import com.example.technomarketproject.model.DTOs.*;
+import com.example.technomarketproject.controller.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

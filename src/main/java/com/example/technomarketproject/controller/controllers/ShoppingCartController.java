@@ -1,9 +1,9 @@
 package com.example.technomarketproject.controller.controllers;
 
-import com.example.technomarketproject.controller.services.ShoppingCartService;
 import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
 import com.example.technomarketproject.model.DTOs.RemoveFromCartDTO;
 import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
+import com.example.technomarketproject.controller.services.ShoppingCartService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

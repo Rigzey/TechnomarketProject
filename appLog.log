@@ -1,0 +1,24 @@
+2023-04-22 22:03:43,452 [INFO] com.example.technomarketproject.TechnomarketProjectApplication [main] Starting TechnomarketProjectApplication using Java 17.0.5 with PID 10464 (C:\Users\Rigzey\Desktop\final_project\TechnomarketProject\target\classes started by Rigzey in C:\Users\Rigzey\Desktop\final_project\TechnomarketProject)
+2023-04-22 22:03:43,453 [INFO] com.example.technomarketproject.TechnomarketProjectApplication [main] No active profile set, falling back to 1 default profile: "default"
+2023-04-22 22:03:43,838 [INFO] org.springframework.data.repository.config.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-04-22 22:03:43,894 [INFO] org.springframework.data.repository.config.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 51 ms. Found 12 JPA repository interfaces.
+2023-04-22 22:03:44,191 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat initialized with port(s): 7777 (http)
+2023-04-22 22:03:44,197 [INFO] org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2023-04-22 22:03:44,197 [INFO] org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/10.1.7]
+2023-04-22 22:03:44,254 [INFO] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2023-04-22 22:03:44,254 [INFO] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 771 ms
+2023-04-22 22:03:44,323 [INFO] com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Starting...
+2023-04-22 22:03:44,529 [INFO] com.zaxxer.hikari.pool.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@29013ef2
+2023-04-22 22:03:44,531 [INFO] com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Start completed.
+2023-04-22 22:03:44,554 [INFO] org.hibernate.jpa.internal.util.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-04-22 22:03:44,583 [INFO] org.hibernate.Version [main] HHH000412: Hibernate ORM core version 6.1.7.Final
+2023-04-22 22:03:44,788 [INFO] SQL dialect [main] HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2023-04-22 22:03:45,378 [INFO] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator [main] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-04-22 22:03:45,384 [INFO] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-04-22 22:03:46,049 [WARN] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-04-22 22:03:46,247 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat started on port(s): 7777 (http) with context path ''
+2023-04-22 22:03:46,253 [INFO] com.example.technomarketproject.TechnomarketProjectApplication [main] Started TechnomarketProjectApplication in 3.054 seconds (process running for 3.389)
+2023-04-22 22:03:57,997 [INFO] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [http-nio-7777-exec-3] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-04-22 22:03:57,998 [INFO] org.springframework.web.servlet.DispatcherServlet [http-nio-7777-exec-3] Initializing Servlet 'dispatcherServlet'
+2023-04-22 22:03:57,999 [INFO] org.springframework.web.servlet.DispatcherServlet [http-nio-7777-exec-3] Completed initialization in 0 ms
+2023-04-22 22:03:58,203 [INFO] com.example.technomarketproject.Logger [http-nio-7777-exec-3] An existing user with e-mail yoanpavlov12345@gmail.com logged in at 2023-04-22T22:03:58.202523200

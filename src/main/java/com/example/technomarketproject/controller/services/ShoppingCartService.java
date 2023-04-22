@@ -4,14 +4,15 @@ import com.example.technomarketproject.model.DTOs.AddToShoppingCartDTO;
 import com.example.technomarketproject.model.DTOs.RemoveFromCartDTO;
 import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.DTOs.SimpleShoppingCartDTO;
-import com.example.technomarketproject.model.entities.*;
+import com.example.technomarketproject.model.entities.Product;
+import com.example.technomarketproject.model.entities.ShoppingCart;
+import com.example.technomarketproject.model.entities.ShoppingCartKey;
+import com.example.technomarketproject.model.entities.User;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
-import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import com.example.technomarketproject.model.repositories.ShoppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

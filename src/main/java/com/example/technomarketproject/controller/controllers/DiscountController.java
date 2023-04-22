@@ -1,8 +1,8 @@
 package com.example.technomarketproject.controller.controllers;
 
-import com.example.technomarketproject.controller.services.DiscountService;
 import com.example.technomarketproject.model.DTOs.AddDiscountDTO;
 import com.example.technomarketproject.model.DTOs.NewDiscountDTO;
+import com.example.technomarketproject.controller.services.DiscountService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -30,9 +30,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "AND (:ratingFrom IS NULL OR p.rating >= :ratingFrom)" +
             "AND (:priceFrom IS NULL OR p.price >= :priceFrom) " +
             "AND (:priceTo IS NULL OR p.price <= :priceTo) " +
-            "AND (:description IS NULL OR p.description LIKE %:description%) " +
-            "AND ((:characteristicIds IS NULL OR pc.characteristic.id IN :characteristicIds) " +
-            "AND (:characteristicValues IS NULL OR pc.value IN :characteristicValues)) ")
+            "AND (:description IS NULL OR p.description LIKE %:description%)")
             Page<Product> findByMultipleCharacteristics(
                 @Param("name") String name,
                 @Param("subcategoryId") Integer subcategoryId,
@@ -41,7 +39,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                 @Param("priceFrom") Double priceFrom,
                 @Param("priceTo") Double priceTo,
                 @Param("description") String description,
-                @Param("characteristicIds") List<Integer> characteristicIds,
-                @Param("characteristicValues") List<String> characteristicValues,
                 Pageable pageable);
 }

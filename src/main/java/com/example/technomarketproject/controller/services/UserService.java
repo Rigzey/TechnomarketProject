@@ -98,13 +98,13 @@ public class UserService extends AbstractService {
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
             throw new UnauthorizedException("Only admins can update other users` profiles!");
         }
-        if(userRepository.existsByEmail(dto.getEmail())){
+        User u = userRepository.findById(userId).get();
+        if(userRepository.existsByEmail(dto.getEmail()) && !u.getEmail().equals(dto.getEmail())){
             throw new BadRequestException("Email must be unique");
         }
-        if(userRepository.existsByPhoneNumber(dto.getPhoneNumber())){
+        if(userRepository.existsByPhoneNumber(dto.getPhoneNumber()) && !u.getPhoneNumber().equals(dto.getPhoneNumber())){
             throw new BadRequestException("Phone number must be unique");
         }
-        User u = userRepository.findById(userId).get();
         u.setEmail(dto.getEmail());
         u.setGender(dto.getGender());
         u.setFirstName(dto.getFirstName());

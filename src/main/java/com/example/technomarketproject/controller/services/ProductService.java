@@ -40,8 +40,9 @@ public class ProductService extends AbstractService{
         p.setPrice(dto.getPrice());
         p.setDescription(dto.getDescription());
         productRepository.save(p);
-
+        List<SimpleProductCharacteristicDTO> dtoList = new ArrayList<>();
         List<ProductCharacteristic> list = new ArrayList<>();
+
         for(CharacteristicWithValuesDTO c : dto.getCharacteristics()){
             Optional<Characteristic> opt = characteristicRepository.findById(c.getId());
             if(opt.isEmpty()){
@@ -57,9 +58,14 @@ public class ProductService extends AbstractService{
             pc.setValue(c.getValue());
             pc.setId(key);
             list.add(pc);
+            SimpleProductCharacteristicDTO spc = mapper.map(pc, SimpleProductCharacteristicDTO.class);
+            dtoList.add(spc);
         }
+
+        SimpleProductDTO result = mapper.map(p, SimpleProductDTO.class);
+        result.setCharacteristics(dtoList);
         productCharacteristicRepository.saveAll(list);
-        return mapper.map(p, SimpleProductDTO.class);
+        return result;
     }
     public void removeProduct(int productId, int userId) {
         if(!findUserById(userId).isAdmin()){
@@ -78,18 +84,23 @@ public class ProductService extends AbstractService{
         }
         if(userId != 0){
             User user = userRepository.findById(userId).get();
+            Product p = optProduct.get();
+
+            SearchHistory newSH = new SearchHistory();
             SearchHistoryKey key = new SearchHistoryKey();
             key.setProductId(productId);
             key.setUserId(userId);
-            SearchHistory current = new SearchHistory();
+            newSH.setId(key);
+            newSH.setProductId(optProduct.get());
+            newSH.setUser(user);
+            newSH.setLastSeen(LocalDateTime.now());
 
-            if(searchHistoryRepository.findByUserAndProductId(user, optProduct.get()).isEmpty()){
-                current.setId(key);
-                current.setProductId(optProduct.get());
-                current.setUser(user);
+            if(searchHistoryRepository.findByUserAndProductId(user, p).isPresent()){
+                SearchHistory sh = searchHistoryRepository.findByUserAndProductId(user, p).get();
+                searchHistoryRepository.delete(sh);
             }
-            current.setLastSeen(LocalDateTime.now());
-            searchHistoryRepository.save(current);
+            searchHistoryRepository.save(newSH);
+
         }
         return mapper.map(optProduct.get(), SimpleProductDTO.class);
     }
@@ -110,8 +121,6 @@ public class ProductService extends AbstractService{
         Double priceFrom = filter.getPriceFrom();
         Double priceTo = filter.getPriceTo();
         String description = filter.getDescription();
-        List<Integer> characteristicIds = filter.getCharacteristicIds();
-        List<String> characteristicValues = filter.getCharacteristicValues();
 
         Page<Product> filteredProducts = productRepository.findByMultipleCharacteristics(
                 name,
@@ -121,8 +130,6 @@ public class ProductService extends AbstractService{
                 priceFrom,
                 priceTo,
                 description,
-                characteristicIds,
-                characteristicValues,
                 pageable
         );
 

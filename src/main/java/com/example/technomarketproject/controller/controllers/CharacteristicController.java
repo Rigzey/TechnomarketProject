@@ -1,7 +1,7 @@
 package com.example.technomarketproject.controller.controllers;
 
-import com.example.technomarketproject.controller.services.CharacteristicService;
 import com.example.technomarketproject.model.DTOs.AddNewCharacteristicDTO;
+import com.example.technomarketproject.controller.services.CharacteristicService;
 import com.example.technomarketproject.model.entities.Characteristic;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

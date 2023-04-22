@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +18,4 @@ public class ProductFilteringDTO {
     private Double priceFrom;
     private Double priceTo;
     private String description;
-    private List<Integer> characteristicIds;
-    private List<String> characteristicValues;
 }

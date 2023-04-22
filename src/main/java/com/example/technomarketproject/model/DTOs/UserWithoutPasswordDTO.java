@@ -19,8 +19,8 @@ public class UserWithoutPasswordDTO {
     @Size(max = 100, message = "Email size too big")
     private String email;
 
-    @Pattern(regexp = "^[mf]$", message = "Invalid gender")
-    private char gender;
+    @Pattern(regexp = "[m|M|f|F]", message = "Invalid gender")
+    private String gender;
 
     @NotBlank(message = "First name cannot be blank")
     private String firstName;
@@ -28,7 +28,6 @@ public class UserWithoutPasswordDTO {
     @NotBlank(message = "Last name cannot be blank")
     private String lastName;
 
-    @NotBlank(message = "Date of birth cannot be blank")
     @Past(message = "Invalid date of birth")
     private LocalDate dateOfBirth;
 

@@ -2,10 +2,7 @@ package com.example.technomarketproject.model.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,6 +12,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class SearchHistoryKey implements Serializable {
     @Column(name = "user_id")
     private int userId;
@@ -22,16 +20,5 @@ public class SearchHistoryKey implements Serializable {
     @Column(name = "product_id")
     private int productId;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SearchHistoryKey that = (SearchHistoryKey) o;
-        return userId == that.userId && productId == that.productId;
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, productId);
-    }
 }
