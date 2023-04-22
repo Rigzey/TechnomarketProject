@@ -25,8 +25,8 @@ public class UserService extends AbstractService {
         String encodedPass = passwordEncoder.encode(u.getPassword());
         u.setPassword(encodedPass);
         userRepository.save(u);
-        logger.info("A new user with name " + dto.getFirstName() + dto.getLastName() +
-                " and e-mail " + dto.getEmail() + " registered at " + LocalDateTime.now());
+        logger.info("A new user with name " + dto.getFirstName() + " " + dto.getLastName() +
+                " and e-mail " + dto.getEmail() + " registered.");
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
     public UserWithoutPasswordDTO login(UserLoginDTO dto) {
@@ -41,7 +41,7 @@ public class UserService extends AbstractService {
         if(u.isDeleted()){
             throw new BadRequestException("User is deleted!");
         }
-        logger.info("An existing user with e-mail " + dto.getEmail() + " logged in at " + LocalDateTime.now());
+        logger.info("An existing user with e-mail " + dto.getEmail() + " logged in. ");
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
     public UserWithoutPasswordDTO changePassword(int userId, int loggedId, ChangePasswordDTO dto) {
@@ -49,6 +49,8 @@ public class UserService extends AbstractService {
             throw new FileNotFoundException("No such user.");
         }
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
+            logger.error("Unauthorized password change attempt made for user with ID "
+                    + userId + " by user with ID " + loggedId);
             throw new UnauthorizedException("Only admins can change other people's passwords.");
         }
         User u = userRepository.findById(userId).get();
@@ -64,6 +66,7 @@ public class UserService extends AbstractService {
         String encodedPass = passwordEncoder.encode(dto.getNewPassword());
         u.setPassword(encodedPass);
         userRepository.save(u);
+        logger.info("Password has been changed for user with ID " + userId);
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
     @Transactional
@@ -72,6 +75,8 @@ public class UserService extends AbstractService {
             throw new FileNotFoundException("No such user.");
         }
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
+            logger.error("Unauthorized account delete attempt made for user with ID "
+                    + userId + " by user with ID " + loggedId);
             throw new UnauthorizedException("Only admins can delete other users` accounts.");
         }
         String currentPass = userRepository.findById(userId).get().getPassword();
@@ -90,12 +95,15 @@ public class UserService extends AbstractService {
         shoppingCartRepository.deleteAll(shoppingCarts);
         orderRepository.deleteAll(orders);
         userRepository.save(u);
+        logger.info("A user with ID " + userId + " has been deleted.");
     }
     public UserWithoutPasswordDTO updateUser(int userId, int loggedId, UserWithoutPasswordDTO dto) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new FileNotFoundException("No such user.");
         }
         if (userId != loggedId && !userRepository.findById(loggedId).get().isAdmin()) {
+            logger.error("Unauthorized account update attempt made for user with ID "
+                    + userId + " by user with ID " + loggedId);
             throw new UnauthorizedException("Only admins can update other users` profiles!");
         }
         User u = userRepository.findById(userId).get();
@@ -113,6 +121,7 @@ public class UserService extends AbstractService {
         u.setPhoneNumber(dto.getPhoneNumber());
         u.setAddress(dto.getAddress());
         userRepository.save(u);
+        logger.info("The profile of a user with ID " + userId + " has been updated.");
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
 
@@ -158,9 +167,11 @@ public class UserService extends AbstractService {
         User user = optU.get();
         Product product = optP.get();
         if(user.getFavourites().contains(product)){
+            logger.info("User with ID " + user + " removed product with ID " + dto.getId() + " from his favourites.");
             user.getFavourites().remove(product);
         }
         else{
+            logger.info("User with ID " + user + " added product with ID " + dto.getId() + " to his favourites.");
             user.getFavourites().add(product);
         }
         userRepository.save(user);
@@ -187,6 +198,8 @@ public class UserService extends AbstractService {
                 + "Here it is: " + u.getPassword() + "\n\n"
                 + "If this request was not done by you, please, be cautious.";
         sendEmail(email, title, msg);
+
+        logger.info("Forgot password e-mail has been sent to " + email);
 
     }
 }

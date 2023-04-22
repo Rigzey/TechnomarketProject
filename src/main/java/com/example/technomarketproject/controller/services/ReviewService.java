@@ -47,6 +47,9 @@ public class ReviewService extends AbstractService {
         r.setComment(dto.getComment());
         reviewRepository.save(r);
 
+        logger.info("A new review has been added for product with ID "
+                + dto.getProductId().getId() + " by a user with ID " + id);
+
         return mapper.map(r, SimpleReviewDTO.class);
     }
     @Transactional
@@ -69,6 +72,9 @@ public class ReviewService extends AbstractService {
         reviewRepository.delete(optReview.get());
         p.getReviews().remove(optReview.get());
         productRepository.save(p);
+
+        logger.info("A user with ID " + userId + " deleted a review with ID "
+                + reviewId + " for a product with ID " + p.getId());
 
     }
 

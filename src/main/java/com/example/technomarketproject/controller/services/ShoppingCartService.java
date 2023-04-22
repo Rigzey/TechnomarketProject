@@ -51,6 +51,8 @@ public class ShoppingCartService extends AbstractService {
         SimpleProductDTO productDTO = mapper.map(p, SimpleProductDTO.class);
         SimpleShoppingCartDTO ssc = mapper.map(sc, SimpleShoppingCartDTO.class);
         ssc.setProductId(productDTO);
+        logger.info("A user with ID " + id + " added a product with ID "
+                + dto.getProduct().getId() + " with the quantity of " + dto.getQuantity());
         return ssc;
     }
     public void deleteProduct(int userId, int productId, RemoveFromCartDTO dto) {
@@ -68,9 +70,12 @@ public class ShoppingCartService extends AbstractService {
         }
         opt.get().setQuantity(opt.get().getQuantity() - dto.getQuantity());
         if(opt.get().getQuantity() == 0){
+            logger.info("A user with ID " + userId + " removed product with ID " + productId + " from his shopping cart.");
             shoppingCartRepository.delete(opt.get());
         }
         else{
+            logger.info("A user with ID " + userId + " removed "
+                    + dto.getQuantity() + " pieces of product with ID " + productId + " from his shopping cart.");
             shoppingCartRepository.save(opt.get());
         }
     }

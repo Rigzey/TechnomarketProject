@@ -27,11 +27,13 @@ public class MediaService extends AbstractService {
     public ProductForImagesDTO uploadProductImages(List<MultipartFile> origin, int productId, int loggedId) {
 
         if(!userRepository.findById(loggedId).get().isAdmin()) {
+            logger.error("A non-admin user with ID " + loggedId + " tried to upload media for product with ID " + productId);
             throw new UnauthorizedException("Only admins can upload product images!");
         }
 
         Optional<Product> opt = productRepository.findById(productId);
         if(opt.isEmpty()) {
+            logger.error("A user with ID " + loggedId + " tried to upload media for a non-existing product with ID " + productId);
             throw new FileNotFoundException("No such product!");
         }
         Product p = opt.get();
@@ -70,6 +72,8 @@ public class MediaService extends AbstractService {
         }
         productImageRepository.saveAll(productImages);
 
+        logger.info("New media has been uploaded for product with ID " + p.getId() + " by user with ID " + loggedId);
+
         ProductForImagesDTO dto = new ProductForImagesDTO();
         dto.setId(productId);
         dto.setName(p.getName());
@@ -80,6 +84,7 @@ public class MediaService extends AbstractService {
         fileName = "uploads" + File.separator + fileName;
         File f = new File(fileName);
         if(f.exists()) {
+            logger.info("A media file with name " + fileName + " has been downloaded.");
             return f;
         }
         throw new FileNotFoundException("File not found!");
@@ -88,6 +93,7 @@ public class MediaService extends AbstractService {
     public void deleteProductImage(String fileName, int loggedId) {
 
         if(!userRepository.findById(loggedId).get().isAdmin()) {
+            logger.error("A non-admin user with ID " + loggedId + " tried to remove a file with name " + fileName);
             throw new UnauthorizedException("Only admins can delete product images!");
         }
 
@@ -95,6 +101,7 @@ public class MediaService extends AbstractService {
         File f = new File(fileName);
         if(f.exists()) {
             f.delete();
+            logger.info("A file with name " + fileName + " has been deleted by a user with ID " + loggedId);
             productImageRepository.deleteByImage(fileName);
         }
         else {
@@ -104,15 +111,23 @@ public class MediaService extends AbstractService {
     @Transactional
     public void deleteAllProductImages(int productId, int loggedId) {
         if(!userRepository.findById(loggedId).get().isAdmin()) {
+            logger.error("A non-admin user with ID " + loggedId +
+                    " tried to remove all media for product with ID " + productId);
             throw new UnauthorizedException("Only admins can delete product images!");
         }
         if(!productRepository.existsById(productId)) {
+            logger.error("A user with ID " + loggedId +
+                    " tried to remove all media for a non-existing product with ID " + productId);
             throw new FileNotFoundException("No such product!");
         }
         Product p = productRepository.findById(productId).get();
         if(productImageRepository.findAllByProduct(p).isEmpty()) {
+            logger.error("A user with ID " + loggedId + " tried to remove media for a product with ID "
+                    + productId + " with no media associated.");
             throw new FileNotFoundException("No images for this product!");
         }
         productImageRepository.deleteAllByProduct(p);
+        logger.info("All media has been deleted for a product with ID "
+                + productId + " by a user with ID " + loggedId);
     }
 }

@@ -55,6 +55,7 @@ public class OrderService extends AbstractService{
         for(Product p : order.getProducts()){
             so.getProducts().add(mapper.map(p, ProductWithIdOnlyDTO.class));
         }
+        logger.info("A user with ID " + id + " placed a new order with ID " + order.getId());
         return mapper.map(order, SimpleOrderDTO.class);
     }
     public void removeOrder(int orderId, int userId) {
@@ -69,6 +70,7 @@ public class OrderService extends AbstractService{
         if(!optUser.get().isAdmin() && optUser.get() != optOrder.get().getUser()){
             throw new UnauthorizedException("Only admins can remove other people`s orders!");
         }
+        logger.info("A user with ID " + userId + " cancelled an order with ID " + orderId);
         orderRepository.deleteById(orderId);
     }
     public SimpleOrderDTO showSpecific(int orderId, int userId) {

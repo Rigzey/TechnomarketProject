@@ -15,7 +15,7 @@ public class Logger {
         LOGGER.error(message);
     }
 
-    public void fatal(String message, Throwable throwable) {
+    public void fatal(String message) {
         LOGGER.fatal(message);
     }
 }

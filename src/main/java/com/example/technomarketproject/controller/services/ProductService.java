@@ -25,10 +25,13 @@ public class ProductService extends AbstractService{
     @Transactional
     public SimpleProductDTO addProduct(AddProductDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
+            logger.error("A non-admin user with ID " + id + " tried to add a new product.");
             throw new UnauthorizedException("User must be admin!");
         }
         Optional<Subcategory> optS = subcategoryRepository.findById(dto.getSubcategoryId());
         if(optS.isEmpty()){
+            logger.error("A user with ID " + id +
+                    " tried to add a new product to a non-existing subcategory with ID " + dto.getSubcategoryId());
             throw new FileNotFoundException("Subcategory with this id does not exist");
         }
         if(productRepository.existsByName(dto.getName())){
@@ -65,16 +68,20 @@ public class ProductService extends AbstractService{
         SimpleProductDTO result = mapper.map(p, SimpleProductDTO.class);
         result.setCharacteristics(dtoList);
         productCharacteristicRepository.saveAll(list);
+        logger.info("A new product with name " + dto.getName() + " has been added by user with ID " + id);
         return result;
     }
     public void removeProduct(int productId, int userId) {
         if(!findUserById(userId).isAdmin()){
+            logger.error("A non-admin user with ID " + userId + " tried to remove a product with ID " + productId);
             throw new UnauthorizedException("User must be admin!");
         }
         if(!productRepository.existsById(productId)){
+            logger.error("A user with ID " + userId + " tried to remove a non-existing product with ID " + productId);
             throw new FileNotFoundException("Product with this id not found!");
         }
         Product p = productRepository.findById(productId).get();
+        logger.info("A product with ID " + productId + " has been removed by user with ID " + userId);
         productRepository.delete(p);
     }
     public SimpleProductDTO showSpecificProduct(int productId, int userId) {
@@ -110,7 +117,7 @@ public class ProductService extends AbstractService{
         if(products.isEmpty()){
             throw new FileNotFoundException("No products found with name containing: " + productName);
         }
-
+        logger.info("New search for a product with name " + productName);
         return products.map(p -> mapper.map(p, SimpleProductDTO.class));
     }
     public Page<Product> filterProducts(ProductFilteringDTO filter, Pageable pageable) {

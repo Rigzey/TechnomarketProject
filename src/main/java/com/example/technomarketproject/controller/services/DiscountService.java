@@ -24,14 +24,23 @@ public class DiscountService extends AbstractService{
     @Transactional
     public NewDiscountDTO addDiscount(AddDiscountDTO dto, int id) {
         if(!findUserById(id).isAdmin()){
+            logger.error("A non-admin user with ID " + id +
+                    " tried to add a new product discount with value "
+                    + dto.getPercentageOff() + " to product with ID " + dto.getProduct().getId());
             throw new UnauthorizedException("Only admins can add discounts!");
         }
         int pId = dto.getProduct().getId();
         if(!productRepository.existsById(pId)){
+            logger.error("A user with ID " + id +
+                    " tried to add a new product discount with value "
+                    + dto.getPercentageOff() + " to a non-existing product with ID " + pId);
             throw new FileNotFoundException("Product with id " + pId + " not found!");
         }
         Product p = productRepository.findById(pId).get();
         if(p.getDiscount() != null){
+            logger.error("A user with ID " + id +
+                    " tried to add a new product discount with value "
+                    + dto.getPercentageOff() + " to an already discounted product with ID " + pId);
             throw new BadRequestException("The product already has a discount!");
         }
         Discount d = mapper.map(dto, Discount.class);
@@ -57,15 +66,22 @@ public class DiscountService extends AbstractService{
 
         NewDiscountDTO result = mapper.map(d, NewDiscountDTO.class);
         result.setProduct(mapper.map(p, ProductWithIdOnlyDTO.class));
+        logger.info("A user with ID " + id +
+                " has successfully added a new product discount with value "
+                + dto.getPercentageOff() + " to a product with ID " + pId);
         return result;
     }
     @Transactional
     public void removeDiscount(int productId, int loggedId) {
         Optional<Product> opt = productRepository.findById(productId);
         if(opt.isEmpty()){
+            logger.error("A user with ID " + loggedId +
+                    " tried to remove a product discount from a non-existing product with ID " + productId);
             throw new FileNotFoundException("Product with id " + productId + " not found!");
         }
         if(!findUserById(loggedId).isAdmin()){
+            logger.error("A non-admin user with ID " + loggedId +
+                    " tried to remove a product discount from product with ID " + productId);
             throw new UnauthorizedException("Only admins can remove discounts!");
         }
         Product p = opt.get();
@@ -75,5 +91,8 @@ public class DiscountService extends AbstractService{
         d.setActive(false);
         discountRepository.save(d);
         productRepository.save(p);
+        logger.info("A user with ID " + loggedId +
+                " has successfully removed a product discount with value "
+                + d + " from a product with ID " + productId);
     }
 }
