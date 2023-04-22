@@ -1,5 +1,6 @@
 package com.example.technomarketproject.controller.services;
 
+import com.example.technomarketproject.Logger;
 import com.example.technomarketproject.model.entities.*;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.repositories.*;
@@ -43,6 +44,8 @@ public abstract class AbstractService {
     protected SearchHistoryRepository searchHistoryRepository;
     @Autowired
     protected ProductImageRepository productImageRepository;
+    @Autowired
+    protected Logger logger;
 
     protected User findUserById(int id){
         User u = userRepository.findById(id).orElseThrow(() -> new FileNotFoundException("User with id " + id + " not found!"));

@@ -1,14 +1,17 @@
 package com.example.technomarketproject.controller.services;
 
+import com.example.technomarketproject.Logger;
 import com.example.technomarketproject.model.DTOs.*;
 import com.example.technomarketproject.model.entities.*;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -25,6 +28,8 @@ public class UserService extends AbstractService {
         String encodedPass = passwordEncoder.encode(u.getPassword());
         u.setPassword(encodedPass);
         userRepository.save(u);
+        logger.info("A new user with name " + dto.getFirstName() + dto.getLastName() +
+                " and e-mail " + dto.getEmail() + " registered at " + LocalDateTime.now());
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
     public UserWithoutPasswordDTO login(UserLoginDTO dto) {
@@ -39,6 +44,7 @@ public class UserService extends AbstractService {
         if(u.isDeleted()){
             throw new BadRequestException("User is deleted!");
         }
+        logger.info("An existing user with e-mail " + dto.getEmail() + " logged in at " + LocalDateTime.now());
         return mapper.map(u, UserWithoutPasswordDTO.class);
     }
     public UserWithoutPasswordDTO changePassword(int userId, int loggedId, ChangePasswordDTO dto) {
