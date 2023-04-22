@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Logger {
-
     private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(Logger.class);
 
     public void info(String message) {

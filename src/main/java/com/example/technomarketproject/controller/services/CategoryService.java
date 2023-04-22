@@ -3,14 +3,9 @@ package com.example.technomarketproject.controller.services;
 import com.example.technomarketproject.model.DTOs.AddCategoryDTO;
 import com.example.technomarketproject.model.DTOs.SimpleCategoryDTO;
 import com.example.technomarketproject.model.entities.Category;
-import com.example.technomarketproject.model.entities.Product;
-import com.example.technomarketproject.model.entities.Subcategory;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
-import com.example.technomarketproject.model.repositories.ProductCharacteristicRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

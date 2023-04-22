@@ -1,6 +1,5 @@
 package com.example.technomarketproject.model.DTOs;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

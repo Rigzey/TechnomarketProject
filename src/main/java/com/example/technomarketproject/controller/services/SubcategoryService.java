@@ -3,12 +3,10 @@ package com.example.technomarketproject.controller.services;
 import com.example.technomarketproject.model.DTOs.AddSubcategoryDTO;
 import com.example.technomarketproject.model.DTOs.SimpleSubcategoryDTO;
 import com.example.technomarketproject.model.entities.Category;
-import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.Subcategory;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

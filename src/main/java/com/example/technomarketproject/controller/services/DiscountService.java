@@ -21,8 +21,6 @@ import java.util.Optional;
 public class DiscountService extends AbstractService{
     @Autowired
     private DiscountRepository discountRepository;
-    // Adding a discount will change a product
-    // So we need Transactional
     @Transactional
     public NewDiscountDTO addDiscount(AddDiscountDTO dto, int id) {
         if(!findUserById(id).isAdmin()){

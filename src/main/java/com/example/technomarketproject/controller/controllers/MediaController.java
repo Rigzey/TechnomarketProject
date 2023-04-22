@@ -2,7 +2,6 @@ package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.controller.services.MediaService;
 import com.example.technomarketproject.model.DTOs.ProductForImagesDTO;
-import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;

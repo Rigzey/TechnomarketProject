@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService extends AbstractService{
@@ -23,8 +22,6 @@ public class ProductService extends AbstractService{
     private ProductCharacteristicRepository productCharacteristicRepository;
     @Autowired
     private CharacteristicRepository characteristicRepository;
-    // Adding a product also adds another product-characteristic relationship
-    // That`s why we need Transactional
     @Transactional
     public SimpleProductDTO addProduct(AddProductDTO dto, int id) {
         if(!findUserById(id).isAdmin()){

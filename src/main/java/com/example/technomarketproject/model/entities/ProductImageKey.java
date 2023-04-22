@@ -2,7 +2,6 @@ package com.example.technomarketproject.model.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
 import lombok.Data;
 
 import java.io.Serializable;

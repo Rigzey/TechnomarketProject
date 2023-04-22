@@ -1,7 +1,6 @@
 package com.example.technomarketproject.controller.services;
 
 import com.example.technomarketproject.model.DTOs.ProductForImagesDTO;
-import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ProductImage;
 import com.example.technomarketproject.model.entities.ProductImageKey;

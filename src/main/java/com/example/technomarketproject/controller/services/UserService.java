@@ -1,16 +1,13 @@
 package com.example.technomarketproject.controller.services;
 
-import com.example.technomarketproject.Logger;
 import com.example.technomarketproject.model.DTOs.*;
 import com.example.technomarketproject.model.entities.*;
 import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import jakarta.transaction.Transactional;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
