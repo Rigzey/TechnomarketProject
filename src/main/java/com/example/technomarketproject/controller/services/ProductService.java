@@ -85,9 +85,12 @@ public class ProductService extends AbstractService{
             key.setProductId(productId);
             key.setUserId(userId);
             SearchHistory current = new SearchHistory();
-            current.setId(key);
-            current.setProductId(optProduct.get());
-            current.setUser(user);
+
+            if(searchHistoryRepository.findByUserAndProductId(user, optProduct.get()).isEmpty()){
+                current.setId(key);
+                current.setProductId(optProduct.get());
+                current.setUser(user);
+            }
             current.setLastSeen(LocalDateTime.now());
             searchHistoryRepository.save(current);
         }

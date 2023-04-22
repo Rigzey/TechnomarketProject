@@ -1,5 +1,6 @@
 package com.example.technomarketproject.model.repositories;
 
+import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.SearchHistory;
 import com.example.technomarketproject.model.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,6 @@ public interface SearchHistoryRepository extends JpaRepository<SearchHistory, In
     Optional<List<SearchHistory>> findByUser(User u);
 
     List<SearchHistory> findAllByUser(User u);
+    Optional<SearchHistory> findByUserAndProductId(User u, Product p);
 
 }

@@ -34,16 +34,19 @@ public class OrderService extends AbstractService{
         User u = opt.get();
         Order order = mapper.map(dto, Order.class);
         order.setUser(u);
+        List<Product> list = new ArrayList<>();
+        for(ShoppingCart s : shoppingCartRepository.findAllByUser(u)){
+            list.add(s.getProduct());
+        }
+        if(list.isEmpty()){
+            throw new BadRequestException("User has no products in the cart");
+        }
+        order.setProducts(list);
         for(Product p : order.getProducts()){
             if(productRepository.findById(p.getId()).isEmpty()){
                 throw new FileNotFoundException("Product with id " + p.getId() + " not found!");
             }
         }
-        List<Product> list = new ArrayList<>();
-        for(ShoppingCart s : shoppingCartRepository.findAllByUser(u)){
-            list.add(s.getProduct());
-        }
-        order.setProducts(list);
         shoppingCartRepository.deleteAllByUser(u);
         orderRepository.save(order);
         SimpleOrderDTO so = mapper.map(order, SimpleOrderDTO.class);
