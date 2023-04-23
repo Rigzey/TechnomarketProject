@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductFilteringDTO {
-    private String name;
     private Integer subcategoryId;
     private Integer categoryId;
     private Integer ratingFrom;

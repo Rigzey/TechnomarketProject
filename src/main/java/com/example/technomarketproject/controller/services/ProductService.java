@@ -122,7 +122,6 @@ public class ProductService extends AbstractService{
         return products.map(p -> mapper.map(p, SearchedProductDTO.class));
     }
     public Page<Product> filterProducts(ProductFilteringDTO filter, Pageable pageable) {
-        String name = filter.getName();
         Integer subcategoryId = filter.getSubcategoryId();
         Integer categoryId = filter.getCategoryId();
         Integer ratingFrom = filter.getRatingFrom();
@@ -131,7 +130,6 @@ public class ProductService extends AbstractService{
         String description = filter.getDescription();
 
         Page<Product> filteredProducts = productRepository.findByMultipleCharacteristics(
-                name,
                 subcategoryId,
                 categoryId,
                 ratingFrom,

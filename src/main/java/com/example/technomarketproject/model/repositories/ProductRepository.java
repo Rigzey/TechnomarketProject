@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     boolean existsByName(String name);
@@ -24,15 +22,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "LEFT JOIN characteristics ch ON pc.characteristic.id = ch.id " +
             "LEFT JOIN product_images pi ON p.id = pi.product.id " +
             "WHERE " +
-            "(:name IS NULL OR p.name LIKE %:name%) " +
-            "AND (:subcategoryId IS NULL OR sc.id = :subcategoryId) " +
+            "(:subcategoryId IS NULL OR sc.id = :subcategoryId) " +
             "AND (:categoryId IS NULL OR c.id = :categoryId) " +
             "AND (:ratingFrom IS NULL OR p.rating >= :ratingFrom)" +
             "AND (:priceFrom IS NULL OR p.price >= :priceFrom) " +
             "AND (:priceTo IS NULL OR p.price <= :priceTo) " +
             "AND (:description IS NULL OR p.description LIKE %:description%)")
             Page<Product> findByMultipleCharacteristics(
-                @Param("name") String name,
                 @Param("subcategoryId") Integer subcategoryId,
                 @Param("categoryId") Integer categoryId,
                 @Param("ratingFrom") Integer ratingFrom,
