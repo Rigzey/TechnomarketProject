@@ -23,5 +23,4 @@ public class ShoppingCart {
     private Product product;
 
     private int quantity;
-
 }

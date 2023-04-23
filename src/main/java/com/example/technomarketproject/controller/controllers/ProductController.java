@@ -1,9 +1,6 @@
 package com.example.technomarketproject.controller.controllers;
 
-import com.example.technomarketproject.model.DTOs.AddProductDTO;
-import com.example.technomarketproject.model.DTOs.ProductFilteringDTO;
-import com.example.technomarketproject.model.DTOs.SearchedProductDTO;
-import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
+import com.example.technomarketproject.model.DTOs.*;
 import com.example.technomarketproject.controller.services.ProductService;
 import com.example.technomarketproject.model.entities.Product;
 import jakarta.servlet.http.HttpSession;

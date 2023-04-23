@@ -74,4 +74,8 @@ public class UserController extends GeneralController {
     public void forgotPass(@RequestBody UserEmailDTO dto){
         userService.forgotPass(dto);
     }
+    @GetMapping("/reset-password")
+    public UserWithoutPasswordDTO resetPass(@RequestParam String token, @RequestBody() String newPassword){
+        return userService.resetPassword(token, newPassword);
+    }
 }

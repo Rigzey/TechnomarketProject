@@ -52,4 +52,6 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> favourites;
+    @Column(name = "password_reset_token")
+    private String passwordResetToken;
 }

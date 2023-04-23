@@ -34,11 +34,14 @@ public class OrderService extends AbstractService{
         Order order = mapper.map(dto, Order.class);
         order.setUser(u);
         List<Product> list = new ArrayList<>();
+        double totalPrice = 0;
         for(ShoppingCart s : shoppingCartRepository.findAllByUser(u)){
             for (int i = 0; i < s.getQuantity(); i++) {
                 list.add(s.getProduct());
+                totalPrice += s.getProduct().getPrice();
             }
         }
+        order.setTotalPrice(totalPrice);
         if(list.isEmpty()){
             throw new BadRequestException("User has no products in the cart");
         }

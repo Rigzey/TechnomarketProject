@@ -19,6 +19,4 @@ public class AddOrderDTO {
     private LocalDate orderDate;
     @Size(min = 1, max = 200, message = "Invalid delivery address size")
     private String deliveryAddress;
-    @Min(value = 0, message = "Total price cannot be negative")
-    private double totalPrice;
 }

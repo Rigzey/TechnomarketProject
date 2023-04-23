@@ -192,14 +192,29 @@ public class UserService extends AbstractService {
             throw new FileNotFoundException("User with this email does not exist");
         }
         User u = userRepository.findByEmail(email);
-        String title = "Forgot email";
-        String msg = "Dear, " + u.getFirstName() + "\n\n"
-                + "You have requested to remember your password. \n\n"
-                + "Here it is: " + u.getPassword() + "\n\n"
-                + "If this request was not done by you, please, be cautious.";
-        sendEmail(email, title, msg);
 
+        String token = generatePasswordResetToken();
+        String resetLink = "http://localhost:7777/reset-password?token=" + token;
+        String title = "Password reset request";
+        String message = "Dear, " + u.getFirstName() + "\n\n" +
+                "Please click on the following link to reset your password: " + resetLink + "\n\n" +
+                "If this request was not done by you, please, be cautious.";
+        sendEmail(u.getEmail(), title, message);
+        u.setPasswordResetToken(token);
+        userRepository.save(u);
         logger.info("Forgot password e-mail has been sent to " + email);
 
+    }
+    public UserWithoutPasswordDTO resetPassword(String token, String newPassword) {
+        Optional<User> opt = userRepository.findByPasswordResetToken(token);
+        if(opt.isEmpty()){
+            throw new UnauthorizedException("Invalid token");
+        }
+        User u = opt.get();
+        String pass = passwordEncoder.encode(newPassword);
+        u.setPassword(pass);
+        u.setPasswordResetToken(null);
+        userRepository.save(u);
+        return mapper.map(u, UserWithoutPasswordDTO.class);
     }
 }
