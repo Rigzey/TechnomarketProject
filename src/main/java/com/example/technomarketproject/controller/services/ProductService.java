@@ -113,13 +113,13 @@ public class ProductService extends AbstractService{
         return mapper.map(optProduct.get(), SimpleProductDTO.class);
     }
 
-    public Page<SimpleProductDTO> searchProductsByName(String productName, Pageable pageable) {
+    public Page<SearchedProductDTO> searchProductsByName(String productName, Pageable pageable) {
         Page<Product> products = productRepository.findAllByNameContainingIgnoreCase(productName, pageable);
         if(products.isEmpty()){
             throw new FileNotFoundException("No products found with name containing: " + productName);
         }
         logger.info("New search for a product with name " + productName);
-        return products.map(p -> mapper.map(p, SimpleProductDTO.class));
+        return products.map(p -> mapper.map(p, SearchedProductDTO.class));
     }
     public Page<Product> filterProducts(ProductFilteringDTO filter, Pageable pageable) {
         String name = filter.getName();

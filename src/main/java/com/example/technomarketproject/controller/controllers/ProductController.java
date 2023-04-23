@@ -2,6 +2,7 @@ package com.example.technomarketproject.controller.controllers;
 
 import com.example.technomarketproject.model.DTOs.AddProductDTO;
 import com.example.technomarketproject.model.DTOs.ProductFilteringDTO;
+import com.example.technomarketproject.model.DTOs.SearchedProductDTO;
 import com.example.technomarketproject.model.DTOs.SimpleProductDTO;
 import com.example.technomarketproject.controller.services.ProductService;
 import com.example.technomarketproject.model.entities.Product;
@@ -45,31 +46,31 @@ public class ProductController extends GeneralController {
     }
 
     @GetMapping("/products/search/{productName}")
-    public ResponseEntity<Page<SimpleProductDTO>> searchProductsByName(
+    public ResponseEntity<Page<SearchedProductDTO>> searchProductsByName(
             @PathVariable String productName,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<SimpleProductDTO> productPage = productService.searchProductsByName(productName, pageable);
+        Page<SearchedProductDTO> productPage = productService.searchProductsByName(productName, pageable);
 
-        List<SimpleProductDTO> productDTOs = productPage.getContent()
+        List<SearchedProductDTO> productDTOs = productPage.getContent()
                 .stream()
-                .map(p -> mapper.map(p, SimpleProductDTO.class))
+                .map(p -> mapper.map(p, SearchedProductDTO.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(new PageImpl<>(productDTOs, pageable, productPage.getTotalElements()));
     }
 
     @PostMapping("/products/filter")
-    public Page<SimpleProductDTO> filterProducts(
+    public Page<SearchedProductDTO> filterProducts(
             @RequestBody ProductFilteringDTO filter,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
 
         Page<Product> filteredProducts = productService.filterProducts(filter, PageRequest.of(page, size));
-        List<SimpleProductDTO> filteredProductsDTOs = filteredProducts.stream()
-                .map(product -> mapper.map(product, SimpleProductDTO.class))
+        List<SearchedProductDTO> filteredProductsDTOs = filteredProducts.stream()
+                .map(product -> mapper.map(product, SearchedProductDTO.class))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(filteredProductsDTOs, filteredProducts.getPageable(), filteredProducts.getTotalElements());
