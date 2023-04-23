@@ -8,7 +8,6 @@ import com.example.technomarketproject.model.exceptions.UnauthorizedException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -193,7 +192,7 @@ public class UserService extends AbstractService {
         }
         User u = userRepository.findByEmail(email);
 
-        String token = generatePasswordResetToken();
+        String token = UUID.randomUUID().toString();
         String resetLink = "http://localhost:7777/reset-password?token=" + token;
         String title = "Password reset request";
         String message = "Dear, " + u.getFirstName() + "\n\n" +

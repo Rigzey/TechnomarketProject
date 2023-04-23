@@ -12,9 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
-import java.util.Base64;
-
 @Service
 public abstract class AbstractService {
     @Autowired
@@ -59,12 +56,5 @@ public abstract class AbstractService {
 
         javaMailSender.send(message);
         System.out.println("Mail sent to " + to + " successfully!");
-    }
-
-    public String generatePasswordResetToken() {
-        SecureRandom random = new SecureRandom();
-        byte[] token = new byte[20];
-        random.nextBytes(token);
-        return Base64.getEncoder().encodeToString(token);
     }
 }
