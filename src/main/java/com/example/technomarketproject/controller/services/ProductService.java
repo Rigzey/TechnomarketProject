@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -92,22 +93,22 @@ public class ProductService extends AbstractService{
         if(userId != 0){
             User user = userRepository.findById(userId).get();
             Product p = optProduct.get();
+            Optional<SearchHistory> opt = searchHistoryRepository.findByUserAndProductId(user, p);
+            SearchHistory sh;
 
-            SearchHistory newSH = new SearchHistory();
-            SearchHistoryKey key = new SearchHistoryKey();
-            key.setProductId(productId);
-            key.setUserId(userId);
-            newSH.setId(key);
-            newSH.setProductId(optProduct.get());
-            newSH.setUser(user);
-            newSH.setLastSeen(LocalDateTime.now());
-
-            if(searchHistoryRepository.findByUserAndProductId(user, p).isPresent()){
-                SearchHistory sh = searchHistoryRepository.findByUserAndProductId(user, p).get();
-                searchHistoryRepository.delete(sh);
+            if(opt.isPresent()){
+                sh = opt.get();
+                sh.setLastSeen(LocalDateTime.now());
             }
-            searchHistoryRepository.save(newSH);
-
+            else{
+                SearchHistoryKey id = new SearchHistoryKey(userId, p.getId());
+                sh = new SearchHistory();
+                sh.setUser(user);
+                sh.setProductId(p);
+                sh.setLastSeen(LocalDateTime.now());
+                sh.setId(id);
+            }
+            searchHistoryRepository.save(sh);
         }
         return mapper.map(optProduct.get(), SimpleProductDTO.class);
     }
