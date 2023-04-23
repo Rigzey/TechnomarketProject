@@ -8,6 +8,7 @@ import com.example.technomarketproject.model.entities.Product;
 import com.example.technomarketproject.model.entities.ShoppingCart;
 import com.example.technomarketproject.model.entities.ShoppingCartKey;
 import com.example.technomarketproject.model.entities.User;
+import com.example.technomarketproject.model.exceptions.BadRequestException;
 import com.example.technomarketproject.model.exceptions.FileNotFoundException;
 import com.example.technomarketproject.model.repositories.ShoppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,9 @@ public class ShoppingCartService extends AbstractService {
         Optional<ShoppingCart> opt = shoppingCartRepository.findShoppingCartByUserAndProduct(optUser.get(), optProduct.get());
         if(opt.isEmpty()){
             throw new FileNotFoundException("Shopping cart does not exist!");
+        }
+        if(dto.getQuantity() > opt.get().getQuantity()) {
+            throw new BadRequestException("Only " + opt.get().getQuantity() + " pieces of this product available in cart!");
         }
         opt.get().setQuantity(opt.get().getQuantity() - dto.getQuantity());
         if(opt.get().getQuantity() == 0){
